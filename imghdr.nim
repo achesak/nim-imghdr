@@ -5,7 +5,11 @@
 # Released under the MIT open source license.
 
 
-proc testImage(data : seq[int8]): string
+type TImageType {.pure.} = enum
+    PNG, JPEG, GIF, TIFF, RGB, PBM, PGM, PPM, BMP, XMB, Rast, Other
+
+
+proc testImage(data : seq[int8]): TImageType
 
 
 proc testPNG(value : seq[int8]): bool = 
@@ -92,7 +96,7 @@ proc testRast(value : seq[int8]): bool =
     return value[0] == 89 and value[1] == 166 and value[2] == 106 and value[3] == 149
 
 
-proc testImage*(file : TFile): string =
+proc testImage*(file : TFile): TImageType =
     ## Determines the format of the image file given. Possible values:
     ##
     ## PNG format - "png"
@@ -124,37 +128,39 @@ proc testImage*(file : TFile): string =
     return testImage(data)
 
 
-proc testImage*(filename : string): string = 
+proc testImage*(filename : string): TImageType = 
     ## Determines the format of the image with the specified filename.
     
     var file : TFile = open(filename)
-    return testImage(file)
+    var format : TImageType = testImage(file)
+    file.close()
+    return format
 
 
-proc testImage*(data : seq[int8]): string = 
+proc testImage*(data : seq[int8]): TImageType = 
     ## Determines the format of the image from the bytes given.
     
     if testPNG(data):
-        return "png"
+        return TImageType.PNG
     elif testJFIF(data) or testEXIF(data):
-        return "jpeg"
+        return TImageType.JPEG
     elif testGIF(data):
-        return "gif"
+        return TImageType.GIF
     elif testTIFF(data):
-        return "tiff"
+        return TImageType.TIFF
     elif testRGB(data):
-        return "rgb"
+        return TImageType.RGB
     elif testPBM(data):
-        return "pbm"
+        return TImageType.PBM
     elif testPGM(data):
-        return "pgm"
+        return TImageType.PGM
     elif testPPM(data):
-        return "ppm"
+        return TImageType.PPM
     elif testBMP(data):
-        return "bmp"
+        return TImageType.BMP
     elif testXMB(data):
-        return "xmb"
+        return TImageType.XMB
     elif testRast(data):
-        return "rast"
+        return TImageType.Rast
     else:
-        return "other"
+        return TImageType.Other
