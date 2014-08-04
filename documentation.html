@@ -242,11 +242,18 @@ a.reference:hover {color: #E00000;background-color: #ffff00;display: margin;
 <div class="navigation" id="navigation">
 <ul class="simple">
 <li>
+  <a class="reference" href="#7" id="57">Types</a>
+  <ul class="simple">
+      <li><a class="reference" href="#101"><wbr />TImage<wbr />Type</a></li>
+
+  </ul>
+</li>
+<li>
   <a class="reference" href="#12" id="62">Procs</a>
   <ul class="simple">
-      <li><a class="reference" href="#101"><wbr />test<wbr />Image</a></li>
-  <li><a class="reference" href="#102"><wbr />test<wbr />Image</a></li>
+      <li><a class="reference" href="#102"><wbr />test<wbr />Image</a></li>
   <li><a class="reference" href="#103"><wbr />test<wbr />Image</a></li>
+  <li><a class="reference" href="#104"><wbr />test<wbr />Image</a></li>
 
   </ul>
 </li>
@@ -255,31 +262,57 @@ a.reference:hover {color: #E00000;background-color: #ffff00;display: margin;
 </div>
 <div class="content" id="content">
 
+<div class="section" id="7">
+<h1><a class="toc-backref" href="#57">Types</a></h1>
+<dl class="item">
+<dt id="101"><pre><span class="Identifier">TImageType</span><span class="Operator">*</span> <span class="Other">{.</span><span class="Identifier">pure</span><span class="Other">.}</span> <span class="Other">=</span> <span class="Keyword">enum</span> 
+  <span class="Identifier">PNG</span><span class="Other">,</span> <span class="Identifier">JPEG</span><span class="Other">,</span> <span class="Identifier">GIF</span><span class="Other">,</span> <span class="Identifier">TIFF</span><span class="Other">,</span> <span class="Identifier">RGB</span><span class="Other">,</span> <span class="Identifier">PBM</span><span class="Other">,</span> <span class="Identifier">PGM</span><span class="Other">,</span> <span class="Identifier">PPM</span><span class="Other">,</span> <span class="Identifier">BMP</span><span class="Other">,</span> <span class="Identifier">XMB</span><span class="Other">,</span> <span class="Identifier">CRW</span><span class="Other">,</span> <span class="Identifier">CR2</span><span class="Other">,</span> <span class="Identifier">SVG</span><span class="Other">,</span> <span class="Identifier">MRW</span><span class="Other">,</span> <span class="Identifier">X3F</span><span class="Other">,</span> 
+  <span class="Identifier">WEBP</span><span class="Other">,</span> <span class="Identifier">XCF</span><span class="Other">,</span> <span class="Identifier">GKSM</span><span class="Other">,</span> <span class="Identifier">PM</span><span class="Other">,</span> <span class="Identifier">FITS</span><span class="Other">,</span> <span class="Identifier">XPM</span><span class="Other">,</span> <span class="Identifier">XPM2</span><span class="Other">,</span> <span class="Identifier">PS</span><span class="Other">,</span> <span class="Identifier">Xfig</span><span class="Other">,</span> <span class="Identifier">IRIS</span><span class="Other">,</span> <span class="Identifier">Rast</span><span class="Other">,</span> <span class="Identifier">Other</span></pre></dt>
+<dd>
+
+</dd>
+
+</dl></div>
 <div class="section" id="12">
 <h1><a class="toc-backref" href="#62">Procs</a></h1>
 <dl class="item">
-<dt id="101"><pre><span class="Keyword">proc</span> <span class="Identifier">testImage</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">file</span><span class="Other">:</span> <span class="Identifier">TFile</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span></pre></dt>
+<dt id="102"><pre><span class="Keyword">proc</span> <span class="Identifier">testImage</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">file</span><span class="Other">:</span> <span class="Identifier">TFile</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">TImageType</span></pre></dt>
 <dd>
-<p>Determines the format of the image file given. Possible values:</p>
-<p>PNG format - &quot;png&quot;</p>
-<p>JPEG format (either JFIF or Exif) - &quot;jpeg&quot;</p>
-<p>GIF format - &quot;gif&quot;</p>
-<p>TIFF format - &quot;tiff&quot;</p>
-<p>SGI format - &quot;rgb&quot;</p>
-<p>PBM (portable bitmap) format - &quot;pbm&quot;</p>
-<p>PGM (portable graymap) format - &quot;pgb&quot;</p>
-<p>PPM (portable pixmap) format - &quot;ppm&quot;</p>
-<p>BMP (bitmap) format - &quot;bmp&quot;</p>
-<p>XMB (X10 or X11 bitmap) format - &quot;xmb&quot;</p>
-<p>Sun raster format - &quot;rast&quot;</p>
-<p>Unknown format - &quot;other&quot;</p>
+Determines the format of the image file given. Possible values:<ul class="simple"><li>PNG format - TImageType.PNG</li>
+<li>JPEG format (either JFIF or Exif) - TImageType.JPEG</li>
+<li>GIF format - TImageType.GIF</li>
+<li>TIFF format - TImageType.TIFF</li>
+<li>SVG format - TImageType.SVG</li>
+<li>SGI (Silicon Graphics workstation) format - TImageType.RGB</li>
+<li>PBM (portable bitmap) format - TImageType.PBM</li>
+<li>PGM (portable graymap) format - TImageType.PGM</li>
+<li>PPM (portable pixmap) format - TImageType.PPM</li>
+<li>BMP (bitmap) format - TImageType.BMP</li>
+<li>XMB (X10 or X11 bitmap) format - TImageType.XMB</li>
+<li>Rast (Sun raster) format - TImageType.Rast</li>
+<li>CRW (Canon camera RAW) format - TImageType.CRW</li>
+<li>CR2 (Canon camera RAW 2) format - TImageType.CR2</li>
+<li>MRW (Minolta camera RAW) format - TImageType.MRW</li>
+<li>X3F (Sigma camera RAW) format - TImageType.X3F</li>
+<li>WEBP format - TImageType.WEBP</li>
+<li>XCF (GIMP native) format - TImageType.XCF</li>
+<li>GKSM (Graphics Kernel System) format - TImageType.GKSM</li>
+<li>PM (XV image) format - TImageType.PM</li>
+<li>FITS (Flexible Image Transport System) format - TImageType.FITS</li>
+<li>XPM (X PixMap 1 and 3) format - TImageType.XPM</li>
+<li>XPM2 (X PixMap 2) format - TImageType.XPM2</li>
+<li>PS (PostScript) format - TImageType.PS</li>
+<li>Xfig format - TImageType.Xfig</li>
+<li>IRIS format - TImageType.IRIS</li>
+<li>Unknown format - TImageType.Other</li>
+</ul>
 
 </dd>
-<dt id="102"><pre><span class="Keyword">proc</span> <span class="Identifier">testImage</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">filename</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span></pre></dt>
+<dt id="103"><pre><span class="Keyword">proc</span> <span class="Identifier">testImage</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">filename</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">TImageType</span></pre></dt>
 <dd>
 Determines the format of the image with the specified filename.
 </dd>
-<dt id="103"><pre><span class="Keyword">proc</span> <span class="Identifier">testImage</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">data</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">int8</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span></pre></dt>
+<dt id="104"><pre><span class="Keyword">proc</span> <span class="Identifier">testImage</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">data</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">int8</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">TImageType</span></pre></dt>
 <dd>
 Determines the format of the image from the bytes given.
 </dd>
@@ -288,7 +321,7 @@ Determines the format of the image from the bytes given.
 
 </div>
 
-<small>Generated: 2014-08-02 20:06:19 UTC</small>
+<small>Generated: 2014-08-03 20:12:31 UTC</small>
 </div>
 </body>
 </html>
