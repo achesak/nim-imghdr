@@ -1,6 +1,6 @@
 ---- About ----
 
-nimrod-imghdr is a Nimrod module for determining the type of an image from a given file, filename, or sequence of bytes. It can detect the PNG, JPEG, GIF, TIFF, SGI, PBM, PGM, PPM, BMP, XMB, and Sun raster formats. nimrod-imghdr is a port of Python's imghdr module.
+nimrod-imghdr is a Nimrod module for determining the type of an image from a given file, filename, or sequence of bytes. It can detect many common imageo formats. nimrod-imghdr is a port of Python's imghdr module.
 
 See the documentation.html file for usage and more info.
 
