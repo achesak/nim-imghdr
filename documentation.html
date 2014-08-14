@@ -242,6 +242,12 @@ a.reference:hover {color: #E00000;background-color: #ffff00;display: margin;
 <div class="navigation" id="navigation">
 <ul class="simple">
 <li>
+  <a class="reference" href="#6" id="56">Imports</a>
+  <ul class="simple">
+    
+  </ul>
+</li>
+<li>
   <a class="reference" href="#7" id="57">Types</a>
   <ul class="simple">
       <li><a class="reference" href="#101"><wbr />TImage<wbr />Type</a></li>
@@ -261,28 +267,13 @@ a.reference:hover {color: #E00000;background-color: #ffff00;display: margin;
 </ul>
 </div>
 <div class="content" id="content">
-
-<div class="section" id="7">
-<h1><a class="toc-backref" href="#57">Types</a></h1>
-<dl class="item">
-<dt id="101"><pre><span class="Identifier">TImageType</span><span class="Operator">*</span> <span class="Other">{.</span><span class="Identifier">pure</span><span class="Other">.}</span> <span class="Other">=</span> <span class="Keyword">enum</span> 
-  <span class="Identifier">PNG</span><span class="Other">,</span> <span class="Identifier">JPEG</span><span class="Other">,</span> <span class="Identifier">GIF</span><span class="Other">,</span> <span class="Identifier">TIFF</span><span class="Other">,</span> <span class="Identifier">RGB</span><span class="Other">,</span> <span class="Identifier">PBM</span><span class="Other">,</span> <span class="Identifier">PGM</span><span class="Other">,</span> <span class="Identifier">PPM</span><span class="Other">,</span> <span class="Identifier">BMP</span><span class="Other">,</span> <span class="Identifier">XMB</span><span class="Other">,</span> <span class="Identifier">CRW</span><span class="Other">,</span> <span class="Identifier">CR2</span><span class="Other">,</span> <span class="Identifier">SVG</span><span class="Other">,</span> <span class="Identifier">MRW</span><span class="Other">,</span> <span class="Identifier">X3F</span><span class="Other">,</span> 
-  <span class="Identifier">WEBP</span><span class="Other">,</span> <span class="Identifier">XCF</span><span class="Other">,</span> <span class="Identifier">GKSM</span><span class="Other">,</span> <span class="Identifier">PM</span><span class="Other">,</span> <span class="Identifier">FITS</span><span class="Other">,</span> <span class="Identifier">XPM</span><span class="Other">,</span> <span class="Identifier">XPM2</span><span class="Other">,</span> <span class="Identifier">PS</span><span class="Other">,</span> <span class="Identifier">Xfig</span><span class="Other">,</span> <span class="Identifier">IRIS</span><span class="Other">,</span> <span class="Identifier">Rast</span><span class="Other">,</span> <span class="Identifier">Other</span></pre></dt>
-<dd>
-
-</dd>
-
-</dl></div>
-<div class="section" id="12">
-<h1><a class="toc-backref" href="#62">Procs</a></h1>
-<dl class="item">
-<dt id="102"><pre><span class="Keyword">proc</span> <span class="Identifier">testImage</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">file</span><span class="Other">:</span> <span class="Identifier">TFile</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">TImageType</span></pre></dt>
-<dd>
-Determines the format of the image file given. Possible values:<ul class="simple"><li>PNG format - TImageType.PNG</li>
-<li>JPEG format (either JFIF or Exif) - TImageType.JPEG</li>
-<li>GIF format - TImageType.GIF</li>
-<li>TIFF format - TImageType.TIFF</li>
-<li>SVG format - TImageType.SVG</li>
+<p>nimrod-imghdr is a Nimrod module for determining the type of image files.</p>
+<p>List of detected formats:</p>
+<ul class="simple"><li>PNG (Portable Network Graphics) format - TImageType.PNG</li>
+<li>JPEG (Joint Photographic Experts Group) format (either JFIF or Exif) - TImageType.JPEG</li>
+<li>GIF (Graphics Interchange Format) format - TImageType.GIF</li>
+<li>TIFF (Tagged Image File Format) format - TImageType.TIFF</li>
+<li>SVG (Scalable Vector Graphics) format - TImageType.SVG</li>
 <li>SGI (Silicon Graphics workstation) format - TImageType.RGB</li>
 <li>PBM (portable bitmap) format - TImageType.PBM</li>
 <li>PGM (portable graymap) format - TImageType.PGM</li>
@@ -304,9 +295,65 @@ Determines the format of the image file given. Possible values:<ul class="simple
 <li>PS (PostScript) format - TImageType.PS</li>
 <li>Xfig format - TImageType.Xfig</li>
 <li>IRIS format - TImageType.IRIS</li>
+<li>SPIFF (Still Picture Interchange File Format) format - TImageType.SPIFF</li>
+<li>GEM (GEM Raster) format - TImageType.GEM</li>
+<li>Amiga icon format - TImageType.Amiga</li>
+<li>TIB (Acronis True Image) format - TImageType.TIB</li>
+<li>JB2 (JBOG2) format - TImageType.JB2</li>
+<li>CIN (Kodak Cineon) format - TImageType.CIN</li>
+<li>PSP (Corel Paint Shop Pro) format - TImageType.PSP</li>
+<li>EXR (OpenEXR) format - TImageType.EXR</li>
+<li>CALS (CALS raster bitmap) format - TImageType.CALS</li>
+<li>DPX (Society of Motion Picture and Television Engineers Digital Picture Exchange image) format - TImageType.DPX</li>
+<li>SYM (Windows SDK graphics symbol) format - TImageType.SYM</li>
+<li>SDR (SmartDraw Drawing) format - TImageType.SDR</li>
+<li>IMG (Img Software Set Bitmap) format - TImageType.IMG</li>
+<li>ADEX (ADEX Corp. ChromaGraph Graphics Card Bitmap Graphic) format - TImageType.ADEX</li>
+<li>NITF (National Imagery Transmission Format) format - TImageType.NITF</li>
+<li>BigTIFF (Big Tagged Image File Format; TIFF &gt; 4 GB) format - TImageType.BigTIFF</li>
+<li>GX2 (Show Partner graphics) format - TImageType.GX2</li>
+<li>PAT (GIMP pattern) format - TImageType.PAT</li>
+<li>CPT (Corel Photopaint) format - TImageType.CPT</li>
+<li>SYW (Harvard Graphics symbol graphic) format - TImageType.SYW</li>
+<li>DWG (generic AutoCAD drawing) format - TImageType.DWG</li>
+<li>PSD (Photoshop image) format - TImageType.PSD</li>
+<li>FBM (fuzzy bitmap) format - TImageType.FBM</li>
+<li>HDR (Radiance High Dynamic Range image) format - TImageType.HDR</li>
+<li>MP (Monochrome Picture TIFF bitmap) format - TImageType.MP</li>
+<li>DRW (generic drawing) format - TImageType.DRW</li>
+<li>Micrografx (Micrografx vector graphics) format - TImageType.Micrografx</li>
+<li>PIC (generic picture) format - TImageType.PIC</li>
+<li>VDI (Ventura Publisher/GEM VDI Image Format Bitmap) format - TImageType.VDI</li>
+<li>ICO (Windows icon) format - TImageType.ICO</li>
+<li>JP2 (JPEG-2000) format - TImageType.JP2</li>
 <li>Unknown format - TImageType.Other</li>
 </ul>
 
+<div class="section" id="6">
+<h1><a class="toc-backref" href="#56">Imports</a></h1>
+<dl class="item">
+<a class="reference external" href="int2ascii.html">int2ascii</a>
+</dl></div>
+<div class="section" id="7">
+<h1><a class="toc-backref" href="#57">Types</a></h1>
+<dl class="item">
+<dt id="101"><pre><span class="Identifier">TImageType</span><span class="Operator">*</span> <span class="Other">{.</span><span class="Identifier">pure</span><span class="Other">.}</span> <span class="Other">=</span> <span class="Keyword">enum</span> 
+  <span class="Identifier">PNG</span><span class="Other">,</span> <span class="Identifier">JPEG</span><span class="Other">,</span> <span class="Identifier">GIF</span><span class="Other">,</span> <span class="Identifier">TIFF</span><span class="Other">,</span> <span class="Identifier">RGB</span><span class="Other">,</span> <span class="Identifier">PBM</span><span class="Other">,</span> <span class="Identifier">PGM</span><span class="Other">,</span> <span class="Identifier">PPM</span><span class="Other">,</span> <span class="Identifier">BMP</span><span class="Other">,</span> <span class="Identifier">XMB</span><span class="Other">,</span> <span class="Identifier">CRW</span><span class="Other">,</span> <span class="Identifier">CR2</span><span class="Other">,</span> <span class="Identifier">SVG</span><span class="Other">,</span> <span class="Identifier">MRW</span><span class="Other">,</span> <span class="Identifier">X3F</span><span class="Other">,</span> 
+  <span class="Identifier">WEBP</span><span class="Other">,</span> <span class="Identifier">XCF</span><span class="Other">,</span> <span class="Identifier">GKSM</span><span class="Other">,</span> <span class="Identifier">PM</span><span class="Other">,</span> <span class="Identifier">FITS</span><span class="Other">,</span> <span class="Identifier">XPM</span><span class="Other">,</span> <span class="Identifier">XPM2</span><span class="Other">,</span> <span class="Identifier">PS</span><span class="Other">,</span> <span class="Identifier">Xfig</span><span class="Other">,</span> <span class="Identifier">IRIS</span><span class="Other">,</span> <span class="Identifier">Rast</span><span class="Other">,</span> <span class="Identifier">SPIFF</span><span class="Other">,</span> <span class="Identifier">GEM</span><span class="Other">,</span> <span class="Identifier">Amiga</span><span class="Other">,</span> 
+  <span class="Identifier">TIB</span><span class="Other">,</span> <span class="Identifier">JB2</span><span class="Other">,</span> <span class="Identifier">CIN</span><span class="Other">,</span> <span class="Identifier">PSP</span><span class="Other">,</span> <span class="Identifier">EXR</span><span class="Other">,</span> <span class="Identifier">CALS</span><span class="Other">,</span> <span class="Identifier">DPX</span><span class="Other">,</span> <span class="Identifier">SYM</span><span class="Other">,</span> <span class="Identifier">SDR</span><span class="Other">,</span> <span class="Identifier">IMG</span><span class="Other">,</span> <span class="Identifier">ADEX</span><span class="Other">,</span> <span class="Identifier">NITF</span><span class="Other">,</span> <span class="Identifier">BigTIFF</span><span class="Other">,</span> <span class="Identifier">GX2</span><span class="Other">,</span> 
+  <span class="Identifier">PAT</span><span class="Other">,</span> <span class="Identifier">CPT</span><span class="Other">,</span> <span class="Identifier">SYW</span><span class="Other">,</span> <span class="Identifier">DWG</span><span class="Other">,</span> <span class="Identifier">PSD</span><span class="Other">,</span> <span class="Identifier">FBM</span><span class="Other">,</span> <span class="Identifier">HDR</span><span class="Other">,</span> <span class="Identifier">MP</span><span class="Other">,</span> <span class="Identifier">DRW</span><span class="Other">,</span> <span class="Identifier">Micrografx</span><span class="Other">,</span> <span class="Identifier">PIC</span><span class="Other">,</span> <span class="Identifier">VDI</span><span class="Other">,</span> <span class="Identifier">ICO</span><span class="Other">,</span> <span class="Identifier">JP2</span><span class="Other">,</span> 
+  <span class="Identifier">Other</span></pre></dt>
+<dd>
+
+</dd>
+
+</dl></div>
+<div class="section" id="12">
+<h1><a class="toc-backref" href="#62">Procs</a></h1>
+<dl class="item">
+<dt id="102"><pre><span class="Keyword">proc</span> <span class="Identifier">testImage</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">file</span><span class="Other">:</span> <span class="Identifier">TFile</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">TImageType</span></pre></dt>
+<dd>
+Determines the format of the image file given.
 </dd>
 <dt id="103"><pre><span class="Keyword">proc</span> <span class="Identifier">testImage</span><span class="Operator">*</span><span class="Other">(</span><span class="Identifier">filename</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">TImageType</span></pre></dt>
 <dd>
@@ -321,7 +368,7 @@ Determines the format of the image from the bytes given.
 
 </div>
 
-<small>Generated: 2014-08-03 20:12:31 UTC</small>
+<small>Generated: 2014-08-14 10:48:48 UTC</small>
 </div>
 </body>
 </html>
