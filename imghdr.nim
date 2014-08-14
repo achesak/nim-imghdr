@@ -5,9 +5,78 @@
 # Released under the MIT open source license.
 
 
+## nimrod-imghdr is a Nimrod module for determining the type of image files.
+##
+## List of detected formats:
+##
+## - PNG (Portable Network Graphics) format - TImageType.PNG
+## - JPEG (Joint Photographic Experts Group) format (either JFIF or Exif) - TImageType.JPEG
+## - GIF (Graphics Interchange Format) format - TImageType.GIF
+## - TIFF (Tagged Image File Format) format - TImageType.TIFF
+## - SVG (Scalable Vector Graphics) format - TImageType.SVG
+## - SGI (Silicon Graphics workstation) format - TImageType.RGB
+## - PBM (portable bitmap) format - TImageType.PBM
+## - PGM (portable graymap) format - TImageType.PGM
+## - PPM (portable pixmap) format - TImageType.PPM
+## - BMP (bitmap) format - TImageType.BMP
+## - XMB (X10 or X11 bitmap) format - TImageType.XMB
+## - Rast (Sun raster) format - TImageType.Rast
+## - CRW (Canon camera RAW) format - TImageType.CRW
+## - CR2 (Canon camera RAW 2) format - TImageType.CR2
+## - MRW (Minolta camera RAW) format - TImageType.MRW
+## - X3F (Sigma camera RAW) format - TImageType.X3F
+## - WEBP format - TImageType.WEBP
+## - XCF (GIMP native) format - TImageType.XCF
+## - GKSM (Graphics Kernel System) format - TImageType.GKSM
+## - PM (XV image) format - TImageType.PM
+## - FITS (Flexible Image Transport System) format - TImageType.FITS
+## - XPM (X PixMap 1 and 3) format - TImageType.XPM
+## - XPM2 (X PixMap 2) format - TImageType.XPM2
+## - PS (PostScript) format - TImageType.PS
+## - Xfig format - TImageType.Xfig
+## - IRIS format - TImageType.IRIS
+## - SPIFF (Still Picture Interchange File Format) format - TImageType.SPIFF
+## - GEM (GEM Raster) format - TImageType.GEM
+## - Amiga icon format - TImageType.Amiga
+## - TIB (Acronis True Image) format - TImageType.TIB
+## - JB2 (JBOG2) format - TImageType.JB2
+## - CIN (Kodak Cineon) format - TImageType.CIN
+## - PSP (Corel Paint Shop Pro) format - TImageType.PSP
+## - EXR (OpenEXR) format - TImageType.EXR
+## - CALS (CALS raster bitmap) format - TImageType.CALS
+## - DPX (Society of Motion Picture and Television Engineers Digital Picture Exchange image) format - TImageType.DPX
+## - SYM (Windows SDK graphics symbol) format - TImageType.SYM
+## - SDR (SmartDraw Drawing) format - TImageType.SDR
+## - IMG (Img Software Set Bitmap) format - TImageType.IMG
+## - ADEX (ADEX Corp. ChromaGraph Graphics Card Bitmap Graphic) format - TImageType.ADEX
+## - NITF (National Imagery Transmission Format) format - TImageType.NITF
+## - BigTIFF (Big Tagged Image File Format; TIFF > 4 GB) format - TImageType.BigTIFF
+## - GX2 (Show Partner graphics) format - TImageType.GX2
+## - PAT (GIMP pattern) format - TImageType.PAT
+## - CPT (Corel Photopaint) format - TImageType.CPT
+## - SYW (Harvard Graphics symbol graphic) format - TImageType.SYW
+## - DWG (generic AutoCAD drawing) format - TImageType.DWG
+## - PSD (Photoshop image) format - TImageType.PSD
+## - FBM (fuzzy bitmap) format - TImageType.FBM
+## - HDR (Radiance High Dynamic Range image) format - TImageType.HDR
+## - MP (Monochrome Picture TIFF bitmap) format - TImageType.MP
+## - DRW (generic drawing) format - TImageType.DRW
+## - Micrografx (Micrografx vector graphics) format - TImageType.Micrografx
+## - PIC (generic picture) format - TImageType.PIC
+## - VDI (Ventura Publisher/GEM VDI Image Format Bitmap) format - TImageType.VDI
+## - ICO (Windows icon) format - TImageType.ICO
+## - JP2 (JPEG-2000) format - TImageType.JP2
+## - Unknown format - TImageType.Other
+
+
+import int2ascii
+
+
 type TImageType* {.pure.} = enum
     PNG, JPEG, GIF, TIFF, RGB, PBM, PGM, PPM, BMP, XMB, CRW, CR2, SVG, MRW, X3F, WEBP, XCF,
-    GKSM, PM, FITS, XPM, XPM2, PS, Xfig, IRIS, Rast, Other
+    GKSM, PM, FITS, XPM, XPM2, PS, Xfig, IRIS, Rast, SPIFF, GEM, Amiga, TIB, JB2, CIN, PSP,
+    EXR, CALS, DPX, SYM, SDR, IMG, ADEX, NITF, BigTIFF, GX2, PAT, CPT, SYW, DWG, PSD, FBM,
+    HDR, MP, DRW, Micrografx, PIC, VDI, ICO, JP2, Other
 
 
 proc testImage(data : seq[int8]): TImageType
@@ -206,36 +275,226 @@ proc testIRIS(value : seq[int8]): bool =
     return value[0] == 1 and value[1] == 218
 
 
+proc testSPIFF(value : seq[int8]): bool =
+    ## Returns true if the image is JPEG data in SPIFF format.
+    
+    # tests: "SPIFF"
+    return value[6..10] == "SPIFF"
+
+
+proc testGEM(value : seq[int8]): bool = 
+    ## Returns true if the image is a GEM Raster file.
+    
+    # tests: EB 3C 90 2A
+    return value[0] == 235 and value[1] == 60 and value[2] == 144 and value[3] == 42
+
+
+proc testAmiga(value : seq[int8]): bool = 
+    ## Returns true if the image is an Amiga icon file.
+    
+    # tests: E3 10 00 01 00 00 00 00
+    return value[0] == 227 and value[1] == 16 and value[2] == 0 and value[3] == 1 and value[4] == 0 and value[5] == 0 and value[6] == 0 and value[7] == 0
+
+
+proc testTIB(value : seq[int8]): bool = 
+    ## Returns true if the image is an Acronis True Image file.
+    
+    # tests: "´nhd"
+    return value[0..3] == "´nhd"
+
+
+proc testJB2(value : seq[int8]): bool = 
+    ## Returns true if the image is a JBOG2 image file.
+    
+    # tests: 97 and "JB2"
+    return value[0] == 151 and value[1..3] == "JB2"
+
+
+proc testCIN(value : seq[int8]): bool = 
+    ## Returns true if the image is a Kodak Cineon file.
+    
+    # tests: 80 2A 5F D7
+    return value[0] == 128 and value[1] == 42 and value[2] == 95 and value[3] == 215
+
+
+proc testPSP(value : seq[int8]): bool = 
+    ## Returns true if the image is a Corel Paint Shop Pro image file.
+    
+    # tests: "BK" and 00
+    return value[1..2] == "BK" and value[3] == 0
+
+
+proc testEXR(value : seq[int8]): bool = 
+    ## Returns true if the image is an OpenEXR bitmap file.
+    
+    # tests: "v/1" and 01
+    return value[0..2] == "v/1" and value[0] == 1
+
+
+proc testCALS(value : seq[int8]): bool = 
+    ## Returns true if the image is a CALS raster bitmap file.
+    
+    # tests: "srcdocid:"
+    return value[0..8] == "srcdocid:"
+
+
+proc testDPX(value : seq[int8]): bool = 
+    ## Returns true if the image is a Society of Motion Picture and Television Engineers Digital Picture Exchange image file.
+   
+    # tests: "XPDS" or "SDPX"
+    return value[0..3] == "XPDS" or value[0..3] == "SDPX"
+
+
+proc testSYM(value : seq[int8]): bool =
+    ## Returns true if the image is a Windows SDK graphics symbol.
+    
+    # tests: "Smbl"
+    return value[0..3] == "Smbl"
+
+
+proc testSDR(value : seq[int8]): bool = 
+    ## Returns true if the image is a SmartDraw Drawing file.
+    
+    # tests: "SMARTDRW"
+    return value[0..7] == "SMARTDRW"
+
+
+proc testIMG(value : seq[int8]): bool = 
+    ## Returns true if the image is a Img Software Set Bitmap.
+    
+    # tests: "SCMI"
+    return value[0..3] == "SCMI"
+
+
+proc testADEX(value : seq[int8]): bool = 
+    ## Returns true if the image is an ADEX Corp. ChromaGraph Graphics Card Bitmap Graphic.
+    
+    # tests: "PICT" and 00 08
+    return value[0..3] == "PICT" and value[4] == 0 and value[5] == 8
+
+
+proc testNITF(value : seq[int8]): bool = 
+    ## Returns true if the image is a National Imagery Transmission Format.
+    
+    # tests: "NITF0"
+    return value[0..4] == "NITF0"
+
+
+proc testBigTIFF(value : seq[int8]): bool = 
+    ## Returns true if the image is a BigTIFF (TIFF > 4 GB).
+    
+    # tests: "MM" and 00 2B
+    return value[0..1] == "MM" and value[2] == 0 and value[3] == 43
+
+
+proc testGX2(value : seq[int8]): bool = 
+    ## Returns true if the image is a Show Partner graphics.
+    
+    # tests: "GX2"
+    return value[0..2] == "GX2"
+
+
+proc testPAT(value : seq[int8]): bool = 
+    ## Returns true if the image is a GIMP pattern file.
+    
+    # tests: "GPAT"
+    return value[0..3] == "GPAT"
+
+
+proc testCPT(value : seq[int8]): bool = 
+    ## Returns true if the image is a Corel Photopaint file.
+    
+    # tests: "CPTFILE" or "CPT7FILE"
+    return value[0..6] == "CPTFILE" or value[0..7] == "CPT7FILE"
+
+
+proc testSYW(value : seq[int8]): bool = 
+    ## Returns true if the image is a Harvard Graphics symbol graphic.
+    
+    # tests: "AMYO"
+    return value[0..3] == "AMYO"
+
+
+proc testDWG(value : seq[int8]): bool = 
+    ## Returns true if the image is a generic AutoCAD drawing.
+    
+    # tests: "AC10"
+    return value[0..3] == "AC10"
+
+
+proc testPSD(value : seq[int8]): bool = 
+    ## Returns true if the image is a Photoshop image.
+    
+    # tests: "8BPS"
+    return value[0..3] == "8BPS"
+
+
+proc testFBM(value : seq[int8]): bool = 
+    ## Returns true if the image is a Fuzzy bitmap file.
+    
+    # tests: "%bitmap"
+    return value[0..6] == "%bitmap"
+
+
+proc testHDR(value : seq[int8]): bool = 
+    ## Returns true if the image is a Radiance High Dynamic Range image.
+    
+    # tests: "#?RADIANCE"
+    return value[0..9] == "#?RADIANCE"
+
+
+proc testMP(value : seq[int8]): bool = 
+    ## Returns true if the image is a Monochrome Picture TIFF bitmap file.
+    
+    # tests: 0C ED
+    return value[0] == 12 and value[1] == 237
+
+
+proc testDRW(value : seq[int8]): bool = 
+    ## Returns true if the image is a generic drawing.
+    
+    # tests: 07
+    return value[0] == 7
+
+
+proc testMicrografx(value : seq[int8]): bool = 
+    ## Returns true if the image is a Micrografx vector graphics file.
+    
+    # tests: 01 FF 02 04 03 02
+    return value[0] == 1 and value[1] == 255 and value[2] == 2 and value[3] == 4 and value[4] == 3 and value[5] == 2
+
+
+proc testPIC(value : seq[int8]): bool = 
+    ## Returns true if the image is a PIC.
+    
+    # tests: 01 00 00 00 01
+    return value[0] == 1 and value[1] == 0 and value[2] == 0 and value[3] == 0 and value[4] == 1
+
+
+proc testVDI(value : seq[int8]): bool = 
+    ## Returns true if the image is a Ventura Publisher/GEM VDI Image Format Bitmap file.
+    
+    # tests: 00 01 00 08 00 01 00 01 01
+    return value[0] == 0 and value[1] == 1 and value[2] == 0 and value[3] == 8 and value[4] == 0 and value[5] == 1 and value[6] == 0 and
+        value[7] == 1 and value[8] == 1
+
+
+proc testICO(value : seq[int8]): bool = 
+    ## Returns true if the image is a Windows icon file.
+    
+    # tests: 00 00 01 00
+    return value[0] == 0 and value[1] == 0 and value[2] == 1 and value[3] == 0
+
+
+proc testJP2(value : seq[int8]): bool = 
+    ## Returns true if the image is a JPEG-2000.
+    
+    # tests: 00 00 00 0C and "jP"
+    return value[0] == 0 and value[1] == 0 and value[2] == 0 and value[3] == 12 and value[4..5] == "jP"
+
+
 proc testImage*(file : TFile): TImageType =
-    ## Determines the format of the image file given. Possible values:
-    ##
-    ## - PNG format - TImageType.PNG
-    ## - JPEG format (either JFIF or Exif) - TImageType.JPEG
-    ## - GIF format - TImageType.GIF
-    ## - TIFF format - TImageType.TIFF
-    ## - SVG format - TImageType.SVG
-    ## - SGI (Silicon Graphics workstation) format - TImageType.RGB
-    ## - PBM (portable bitmap) format - TImageType.PBM
-    ## - PGM (portable graymap) format - TImageType.PGM
-    ## - PPM (portable pixmap) format - TImageType.PPM
-    ## - BMP (bitmap) format - TImageType.BMP
-    ## - XMB (X10 or X11 bitmap) format - TImageType.XMB
-    ## - Rast (Sun raster) format - TImageType.Rast
-    ## - CRW (Canon camera RAW) format - TImageType.CRW
-    ## - CR2 (Canon camera RAW 2) format - TImageType.CR2
-    ## - MRW (Minolta camera RAW) format - TImageType.MRW
-    ## - X3F (Sigma camera RAW) format - TImageType.X3F
-    ## - WEBP format - TImageType.WEBP
-    ## - XCF (GIMP native) format - TImageType.XCF
-    ## - GKSM (Graphics Kernel System) format - TImageType.GKSM
-    ## - PM (XV image) format - TImageType.PM
-    ## - FITS (Flexible Image Transport System) format - TImageType.FITS
-    ## - XPM (X PixMap 1 and 3) format - TImageType.XPM
-    ## - XPM2 (X PixMap 2) format - TImageType.XPM2
-    ## - PS (PostScript) format - TImageType.PS
-    ## - Xfig format - TImageType.Xfig
-    ## - IRIS format - TImageType.IRIS
-    ## - Unknown format - TImageType.Other
+    ## Determines the format of the image file given.
     
     var data = newSeq[int8](32)
     discard file.readBytes(data, 0, 32)
@@ -306,5 +565,67 @@ proc testImage*(data : seq[int8]): TImageType =
         return TImageType.Xfig
     elif testIRIS(data):
         return TImageType.IRIS
+    elif testSPIFF(data):
+        return TImageType.SPIFF
+    elif testGEM(data):
+        return TImageType.GEM
+    elif testAmiga(data):
+        return TImageType.Amiga
+    elif testTIB(data):
+        return TImageType.TIB
+    elif testJB2(data):
+        return TImageType.JB2
+    elif testCIN(data):
+        return TImageType.CIN
+    elif testPSP(data):
+        return TImageType.PSP
+    elif testEXR(data):
+        return TImageType.EXR
+    elif testCALS(data):
+        return TImageType.CALS
+    elif testDPX(data):
+        return TImageType.DPX
+    elif testSYM(data):
+        return TImageType.SYM
+    elif testSDR(data):
+        return TImageType.SDR
+    elif testIMG(data):
+        return TImageType.IMG
+    elif testADEX(data):
+        return TImageType.ADEX
+    elif testNITF(data):
+        return TImageType.NITF
+    elif testBigTIFF(data):
+        return TImageType.BigTIFF
+    elif testGX2(data):
+        return TImageType.GX2
+    elif testPAT(data):
+        return TImageType.PAT
+    elif testCPT(data):
+        return TImageType.CPT
+    elif testSYW(data):
+        return TImageType.SYW
+    elif testDWG(data):
+        return TImageType.DWG
+    elif testPSD(data):
+        return TImageType.PSD
+    elif testFBM(data):
+        return TImageType.FBM
+    elif testHDR(data):
+        return TImageType.HDR
+    elif testMP(data):
+        return TImageType.MP
+    elif testDRW(data):
+        return TImageType.DRW
+    elif testMicrografx(data):
+        return TImageType.Micrografx
+    elif testPIC(data):
+        return TImageType.PIC
+    elif testVDI(data):
+        return TImageType.VDI
+    elif testICO(data):
+        return TImageType.ICO
+    elif testJP2(data):
+        return TImageType.JP2
     else:
         return TImageType.Other
