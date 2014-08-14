@@ -1,8 +1,10 @@
 ---- About ----
 
-nimrod-imghdr is a Nimrod module for determining the type of an image from a given file, filename, or sequence of bytes. It can detect many common imageo formats. nimrod-imghdr is a port of Python's imghdr module.
+nimrod-imghdr is a Nimrod module for determining the type of an image from a given file, filename, or sequence of bytes. It can detect many common image formats. nimrod-imghdr is a port of Python's imghdr module.
 
-See the documentation.html file for usage and more info.
+See the documentation.html file for a full list of supported formats, usage and more info.
+
+nimrod-imghdr requires the int2ascii.nim file, available at https://github.com/achesak/nimrod-int2ascii.
 
 ---- License ----
 
