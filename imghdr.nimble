@@ -6,4 +6,4 @@ description = "Library for detecting the format of an image"
 license = "MIT"
 
 [Deps]
-Requires: "nimrod >= 0.9.2", "int2ascii"
+Requires: "nimrod >= 0.10.2"

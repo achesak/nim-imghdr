@@ -1,85 +1,97 @@
-# Nimrod module for determining the type of image files.
+# Nim module for determining the type of image files.
 # Ported from Python's imghdr module.
 
 # Written by Adam Chesak.
 # Released under the MIT open source license.
 
 
-## nimrod-imghdr is a Nimrod module for determining the type of image files.
+## nim-imghdr is a Nim module for determining the type of image files.
 ##
 ## List of detected formats:
 ##
-## - PNG (Portable Network Graphics) format - TImageType.PNG
-## - JPEG (Joint Photographic Experts Group) format (either JFIF or Exif) - TImageType.JPEG
-## - GIF (Graphics Interchange Format) format - TImageType.GIF
-## - TIFF (Tagged Image File Format) format - TImageType.TIFF
-## - SVG (Scalable Vector Graphics) format - TImageType.SVG
-## - SGI (Silicon Graphics workstation) format - TImageType.RGB
-## - PBM (portable bitmap) format - TImageType.PBM
-## - PGM (portable graymap) format - TImageType.PGM
-## - PPM (portable pixmap) format - TImageType.PPM
-## - BMP (bitmap) format - TImageType.BMP
-## - XMB (X10 or X11 bitmap) format - TImageType.XMB
-## - Rast (Sun raster) format - TImageType.Rast
-## - CRW (Canon camera RAW) format - TImageType.CRW
-## - CR2 (Canon camera RAW 2) format - TImageType.CR2
-## - MRW (Minolta camera RAW) format - TImageType.MRW
-## - X3F (Sigma camera RAW) format - TImageType.X3F
-## - WEBP format - TImageType.WEBP
-## - XCF (GIMP native) format - TImageType.XCF
-## - GKSM (Graphics Kernel System) format - TImageType.GKSM
-## - PM (XV image) format - TImageType.PM
-## - FITS (Flexible Image Transport System) format - TImageType.FITS
-## - XPM (X PixMap 1 and 3) format - TImageType.XPM
-## - XPM2 (X PixMap 2) format - TImageType.XPM2
-## - PS (PostScript) format - TImageType.PS
-## - Xfig format - TImageType.Xfig
-## - IRIS format - TImageType.IRIS
-## - SPIFF (Still Picture Interchange File Format) format - TImageType.SPIFF
-## - GEM (GEM Raster) format - TImageType.GEM
-## - Amiga icon format - TImageType.Amiga
-## - TIB (Acronis True Image) format - TImageType.TIB
-## - JB2 (JBOG2) format - TImageType.JB2
-## - CIN (Kodak Cineon) format - TImageType.CIN
-## - PSP (Corel Paint Shop Pro) format - TImageType.PSP
-## - EXR (OpenEXR) format - TImageType.EXR
-## - CALS (CALS raster bitmap) format - TImageType.CALS
-## - DPX (Society of Motion Picture and Television Engineers Digital Picture Exchange image) format - TImageType.DPX
-## - SYM (Windows SDK graphics symbol) format - TImageType.SYM
-## - SDR (SmartDraw Drawing) format - TImageType.SDR
-## - IMG (Img Software Set Bitmap) format - TImageType.IMG
-## - ADEX (ADEX Corp. ChromaGraph Graphics Card Bitmap Graphic) format - TImageType.ADEX
-## - NITF (National Imagery Transmission Format) format - TImageType.NITF
-## - BigTIFF (Big Tagged Image File Format; TIFF > 4 GB) format - TImageType.BigTIFF
-## - GX2 (Show Partner graphics) format - TImageType.GX2
-## - PAT (GIMP pattern) format - TImageType.PAT
-## - CPT (Corel Photopaint) format - TImageType.CPT
-## - SYW (Harvard Graphics symbol graphic) format - TImageType.SYW
-## - DWG (generic AutoCAD drawing) format - TImageType.DWG
-## - PSD (Photoshop image) format - TImageType.PSD
-## - FBM (fuzzy bitmap) format - TImageType.FBM
-## - HDR (Radiance High Dynamic Range image) format - TImageType.HDR
-## - MP (Monochrome Picture TIFF bitmap) format - TImageType.MP
-## - DRW (generic drawing) format - TImageType.DRW
-## - Micrografx (Micrografx vector graphics) format - TImageType.Micrografx
-## - PIC (generic picture) format - TImageType.PIC
-## - VDI (Ventura Publisher/GEM VDI Image Format Bitmap) format - TImageType.VDI
-## - ICO (Windows icon) format - TImageType.ICO
-## - JP2 (JPEG-2000) format - TImageType.JP2
-## - Unknown format - TImageType.Other
+## - PNG (Portable Network Graphics) format - ImageType.PNG
+## - JPEG (Joint Photographic Experts Group) format (either JFIF or Exif) - ImageType.JPEG
+## - GIF (Graphics Interchange Format) format - ImageType.GIF
+## - TIFF (Tagged Image File Format) format - ImageType.TIFF
+## - SVG (Scalable Vector Graphics) format - ImageType.SVG
+## - SGI (Silicon Graphics workstation) format - ImageType.RGB
+## - PBM (portable bitmap) format - ImageType.PBM
+## - PGM (portable graymap) format - ImageType.PGM
+## - PPM (portable pixmap) format - ImageType.PPM
+## - BMP (bitmap) format - ImageType.BMP
+## - XMB (X10 or X11 bitmap) format - ImageType.XMB
+## - Rast (Sun raster) format - ImageType.Rast
+## - CRW (Canon camera RAW) format - ImageType.CRW
+## - CR2 (Canon camera RAW 2) format - ImageType.CR2
+## - MRW (Minolta camera RAW) format - ImageType.MRW
+## - X3F (Sigma camera RAW) format - ImageType.X3F
+## - WEBP format - ImageType.WEBP
+## - XCF (GIMP native) format - ImageType.XCF
+## - GKSM (Graphics Kernel System) format - ImageType.GKSM
+## - PM (XV image) format - ImageType.PM
+## - FITS (Flexible Image Transport System) format - ImageType.FITS
+## - XPM (X PixMap 1 and 3) format - ImageType.XPM
+## - XPM2 (X PixMap 2) format - ImageType.XPM2
+## - PS (PostScript) format - ImageType.PS
+## - Xfig format - ImageType.Xfig
+## - IRIS format - ImageType.IRIS
+## - SPIFF (Still Picture Interchange File Format) format - ImageType.SPIFF
+## - GEM (GEM Raster) format - ImageType.GEM
+## - Amiga icon format - ImageType.Amiga
+## - TIB (Acronis True Image) format - ImageType.TIB
+## - JB2 (JBOG2) format - ImageType.JB2
+## - CIN (Kodak Cineon) format - ImageType.CIN
+## - PSP (Corel Paint Shop Pro) format - ImageType.PSP
+## - EXR (OpenEXR) format - ImageType.EXR
+## - CALS (CALS raster bitmap) format - ImageType.CALS
+## - DPX (Society of Motion Picture and Television Engineers Digital Picture Exchange image) format - ImageType.DPX
+## - SYM (Windows SDK graphics symbol) format - ImageType.SYM
+## - SDR (SmartDraw Drawing) format - ImageType.SDR
+## - IMG (Img Software Set Bitmap) format - ImageType.IMG
+## - ADEX (ADEX Corp. ChromaGraph Graphics Card Bitmap Graphic) format - ImageType.ADEX
+## - NITF (National Imagery Transmission Format) format - ImageType.NITF
+## - BigTIFF (Big Tagged Image File Format; TIFF > 4 GB) format - ImageType.BigTIFF
+## - GX2 (Show Partner graphics) format - ImageType.GX2
+## - PAT (GIMP pattern) format - ImageType.PAT
+## - CPT (Corel Photopaint) format - ImageType.CPT
+## - SYW (Harvard Graphics symbol graphic) format - ImageType.SYW
+## - DWG (generic AutoCAD drawing) format - ImageType.DWG
+## - PSD (Photoshop image) format - ImageType.PSD
+## - FBM (fuzzy bitmap) format - ImageType.FBM
+## - HDR (Radiance High Dynamic Range image) format - ImageType.HDR
+## - MP (Monochrome Picture TIFF bitmap) format - ImageType.MP
+## - DRW (generic drawing) format - ImageType.DRW
+## - Micrografx (Micrografx vector graphics) format - ImageType.Micrografx
+## - PIC (generic picture) format - ImageType.PIC
+## - VDI (Ventura Publisher/GEM VDI Image Format Bitmap) format - ImageType.VDI
+## - ICO (Windows icon) format - ImageType.ICO
+## - JP2 (JPEG-2000) format - ImageType.JP2
+## - Unknown format - ImageType.Other
 
 
-import int2ascii
+proc int2ascii(i : seq[int8]): string = 
+    ## Converts a sequence of integers into a string containing all of the characters.
+    
+    var s : string = ""
+    for j, value in i:
+        s = s & (chr(int(value)))
+    return s
 
 
-type TImageType* {.pure.} = enum
+proc `==`(i : seq[int8], s : string): bool = 
+    ## Operator for comparing a seq of ints with a string.
+    
+    return int2ascii(i) == s
+
+
+type ImageType* {.pure.} = enum
     PNG, JPEG, GIF, TIFF, RGB, PBM, PGM, PPM, BMP, XMB, CRW, CR2, SVG, MRW, X3F, WEBP, XCF,
     GKSM, PM, FITS, XPM, XPM2, PS, Xfig, IRIS, Rast, SPIFF, GEM, Amiga, TIB, JB2, CIN, PSP,
     EXR, CALS, DPX, SYM, SDR, IMG, ADEX, NITF, BigTIFF, GX2, PAT, CPT, SYW, DWG, PSD, FBM,
     HDR, MP, DRW, Micrografx, PIC, VDI, ICO, JP2, Other
 
 
-proc testImage(data : seq[int8]): TImageType
+proc testImage*(data : seq[int8]): ImageType
 
 
 proc testPNG(value : seq[int8]): bool = 
@@ -328,7 +340,7 @@ proc testEXR(value : seq[int8]): bool =
     ## Returns true if the image is an OpenEXR bitmap file.
     
     # tests: "v/1" and 01
-    return value[0..2] == "v/1" and value[0] == 1
+    return value[0..2] == "v/1" and value[2] == 1
 
 
 proc testCALS(value : seq[int8]): bool = 
@@ -493,7 +505,7 @@ proc testJP2(value : seq[int8]): bool =
     return value[0] == 0 and value[1] == 0 and value[2] == 0 and value[3] == 12 and value[4..5] == "jP"
 
 
-proc testImage*(file : TFile): TImageType =
+proc testImage*(file : File): ImageType =
     ## Determines the format of the image file given.
     
     var data = newSeq[int8](32)
@@ -501,131 +513,131 @@ proc testImage*(file : TFile): TImageType =
     return testImage(data)
 
 
-proc testImage*(filename : string): TImageType = 
+proc testImage*(filename : string): ImageType = 
     ## Determines the format of the image with the specified filename.
     
-    var file : TFile = open(filename)
-    var format : TImageType = testImage(file)
+    var file : File = open(filename)
+    var format : ImageType = testImage(file)
     file.close()
     return format
 
 
-proc testImage*(data : seq[int8]): TImageType = 
+proc testImage*(data : seq[int8]): ImageType = 
     ## Determines the format of the image from the bytes given.
     
     if testPNG(data):
-        return TImageType.PNG
+        return ImageType.PNG
     elif testJFIF(data) or testEXIF(data):
-        return TImageType.JPEG
+        return ImageType.JPEG
     elif testGIF(data):
-        return TImageType.GIF
+        return ImageType.GIF
     elif testCRW(data):
-        return TImageType.CRW
+        return ImageType.CRW
     elif testCR2(data):
-        return TImageType.CR2
+        return ImageType.CR2
     elif testTIFF(data):
-        return TImageType.TIFF
+        return ImageType.TIFF
     elif testRGB(data):
-        return TImageType.RGB
+        return ImageType.RGB
     elif testPBM(data):
-        return TImageType.PBM
+        return ImageType.PBM
     elif testPGM(data):
-        return TImageType.PGM
+        return ImageType.PGM
     elif testPPM(data):
-        return TImageType.PPM
+        return ImageType.PPM
     elif testBMP(data):
-        return TImageType.BMP
+        return ImageType.BMP
     elif testXMB(data):
-        return TImageType.XMB
+        return ImageType.XMB
     elif testRast(data):
-        return TImageType.Rast
+        return ImageType.Rast
     elif testSVG(data):
-        return TImageType.SVG
+        return ImageType.SVG
     elif testMRW(data):
-        return TImageType.MRW
+        return ImageType.MRW
     elif testX3F(data):
-        return TImageType.X3F
+        return ImageType.X3F
     elif testWEBP(data):
-        return TImageType.WEBP
+        return ImageType.WEBP
     elif testXCF(data):
-        return TImageType.XCF
+        return ImageType.XCF
     elif testGKSM(data):
-        return TImageType.GKSM
+        return ImageType.GKSM
     elif testPM(data):
-        return TImageType.PM
+        return ImageType.PM
     elif testFITS(data):
-        return TImageType.FITS
+        return ImageType.FITS
     elif testXPM(data):
-        return TImageType.XPM
+        return ImageType.XPM
     elif testXPM2(data):
-        return TImageType.XPM2
+        return ImageType.XPM2
     elif testPS(data):
-        return TImageType.PS
+        return ImageType.PS
     elif testXFIG(data):
-        return TImageType.Xfig
+        return ImageType.Xfig
     elif testIRIS(data):
-        return TImageType.IRIS
+        return ImageType.IRIS
     elif testSPIFF(data):
-        return TImageType.SPIFF
+        return ImageType.SPIFF
     elif testGEM(data):
-        return TImageType.GEM
+        return ImageType.GEM
     elif testAmiga(data):
-        return TImageType.Amiga
+        return ImageType.Amiga
     elif testTIB(data):
-        return TImageType.TIB
+        return ImageType.TIB
     elif testJB2(data):
-        return TImageType.JB2
+        return ImageType.JB2
     elif testCIN(data):
-        return TImageType.CIN
+        return ImageType.CIN
     elif testPSP(data):
-        return TImageType.PSP
+        return ImageType.PSP
     elif testEXR(data):
-        return TImageType.EXR
+        return ImageType.EXR
     elif testCALS(data):
-        return TImageType.CALS
+        return ImageType.CALS
     elif testDPX(data):
-        return TImageType.DPX
+        return ImageType.DPX
     elif testSYM(data):
-        return TImageType.SYM
+        return ImageType.SYM
     elif testSDR(data):
-        return TImageType.SDR
+        return ImageType.SDR
     elif testIMG(data):
-        return TImageType.IMG
+        return ImageType.IMG
     elif testADEX(data):
-        return TImageType.ADEX
+        return ImageType.ADEX
     elif testNITF(data):
-        return TImageType.NITF
+        return ImageType.NITF
     elif testBigTIFF(data):
-        return TImageType.BigTIFF
+        return ImageType.BigTIFF
     elif testGX2(data):
-        return TImageType.GX2
+        return ImageType.GX2
     elif testPAT(data):
-        return TImageType.PAT
+        return ImageType.PAT
     elif testCPT(data):
-        return TImageType.CPT
+        return ImageType.CPT
     elif testSYW(data):
-        return TImageType.SYW
+        return ImageType.SYW
     elif testDWG(data):
-        return TImageType.DWG
+        return ImageType.DWG
     elif testPSD(data):
-        return TImageType.PSD
+        return ImageType.PSD
     elif testFBM(data):
-        return TImageType.FBM
+        return ImageType.FBM
     elif testHDR(data):
-        return TImageType.HDR
+        return ImageType.HDR
     elif testMP(data):
-        return TImageType.MP
+        return ImageType.MP
     elif testDRW(data):
-        return TImageType.DRW
+        return ImageType.DRW
     elif testMicrografx(data):
-        return TImageType.Micrografx
+        return ImageType.Micrografx
     elif testPIC(data):
-        return TImageType.PIC
+        return ImageType.PIC
     elif testVDI(data):
-        return TImageType.VDI
+        return ImageType.VDI
     elif testICO(data):
-        return TImageType.ICO
+        return ImageType.ICO
     elif testJP2(data):
-        return TImageType.JP2
+        return ImageType.JP2
     else:
-        return TImageType.Other
+        return ImageType.Other
