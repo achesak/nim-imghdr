@@ -72,9 +72,11 @@
 proc int2ascii(i : seq[int8]): string = 
     ## Converts a sequence of integers into a string containing all of the characters.
     
+    let h = high(uint8).int + 1
+    
     var s : string = ""
     for j, value in i:
-        s = s & (chr(int(value)))
+        s = s & chr(value %% h)
     return s
 
 
