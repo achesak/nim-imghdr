@@ -1,9 +1,9 @@
 [Package]
 name = "imghdr"
-version = "0.1"
+version = "1.0"
 author = "Adam Chesak"
 description = "Library for detecting the format of an image"
 license = "MIT"
 
 [Deps]
-Requires: "nimrod >= 0.10.2"
+Requires: "nim >= 0.13"

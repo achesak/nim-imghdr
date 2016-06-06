@@ -1,9 +1,0 @@
----- About ----
-
-nim-imghdr is a Nimrod module for determining the type of an image from a given file, filename, or sequence of bytes. It can detect many common image formats. nim-imghdr is a port of Python's imghdr module.
-
-See the documentation.html file for a full list of supported formats, usage and more info.
-
----- License ----
-
-nim-imghdr is released under the MIT open source license.
