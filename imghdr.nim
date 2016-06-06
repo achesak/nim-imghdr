@@ -71,10 +71,12 @@
 
 proc int2ascii(i : seq[int8]): string = 
     ## Converts a sequence of integers into a string containing all of the characters.
+
+    let h = high(uint8).int + 1
     
     var s : string = ""
     for j, value in i:
-        s = s & (chr(int(value)))
+        s = s & chr(value %% h)
     return s
 
 
@@ -91,7 +93,7 @@ type ImageType* {.pure.} = enum
     HDR, MP, DRW, Micrografx, PIC, VDI, ICO, JP2, Other
 
 
-proc testImage*(data : seq[int8]): ImageType
+proc testImage*(data : seq[int8]): ImageType {.gcsafe.}
 
 
 proc testPNG(value : seq[int8]): bool = 
@@ -505,7 +507,7 @@ proc testJP2(value : seq[int8]): bool =
     return value[0] == 0 and value[1] == 0 and value[2] == 0 and value[3] == 12 and value[4..5] == "jP"
 
 
-proc testImage*(file : File): ImageType =
+proc testImage*(file : File): ImageType {.gcsafe.} =
     ## Determines the format of the image file given.
     
     var data = newSeq[int8](32)
@@ -513,7 +515,7 @@ proc testImage*(file : File): ImageType =
     return testImage(data)
 
 
-proc testImage*(filename : string): ImageType = 
+proc testImage*(filename : string): ImageType {.gcsafe.} = 
     ## Determines the format of the image with the specified filename.
     
     var file : File = open(filename)
