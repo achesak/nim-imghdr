@@ -105,28 +105,28 @@ proc testJFIF(value : seq[int8]): bool =
     ## Returns true if the image is JPEG data in JFIF format.
     
     # tests: "JFIF"
-    return value[6] == 74 and value[7] == 70 and value[8] == 73 and value[9] == 70
+    return value[6..9] == "JFIF"
 
 
 proc testEXIF(value : seq[int8]): bool = 
     ## Returns true if the image is JPEG data in EXIF format.
     
     # tests: "Exif"
-    return value[6] == 69 and value[7] == 120 and value[8] == 105 and value[9] == 102
+    return value[6..9] == "Exif"
 
 
 proc testGIF(value : seq[int8]): bool = 
     ## Returns true if the image is a GIF.
     
     # tests: "GIF87a" or "GIF89a"
-    return value[0] == 71 and value[1] == 73 and value[2] == 70 and value[3] == 56 and (value[4] == 57 or value[4] == 55) and value[5] == 97
+    return value[0..5] == "GIF87a" or value[0..5] == "GIF89a"
 
 
 proc testTIFF(value : seq[int8]): bool = 
     ## Returns true if the image is TIFF.
     
     # tests: "MM" or "II"
-    return (value[0] == 77 and value[1] == 77) or (value[0] == 73 and value[1] == 73)
+    return value[0..1] == "MM" or value[0..1] == "II"
 
 
 proc testRGB(value : seq[int8]): bool = 
@@ -161,14 +161,14 @@ proc testBMP(value : seq[int8]): bool =
     ## Returns true if the image is a BMP.
     
     # tests: "BM"
-    return value[0] == 66 and value[1] == 77
+    return value[0..1] == "BM"
 
 
 proc testXMB(value : seq[int8]): bool = 
     ## Returns true if the image is a XMB.
     
     # tests: "#define "
-    return value[0] == 35 and value[1] == 100 and value[1] == 101 and value[2] == 102 and value[3] == 105 and value[4] == 110 and value[5] == 101 and value[6] == 32
+    return value[0..6] == "#define "
 
 
 proc testRast(value : seq[int8]): bool = 
@@ -182,14 +182,14 @@ proc testCRW(value : seq[int8]): bool =
     ## Returns true if the image is a CRW (Canon camera RAW) file.
     
     # tests: "II" and "HEAPCCDR"
-    return value[0] == 73 and value[1] == 73 and value[6] == 72 and value[7] == 69 and value[8] == 65 and value[9] == 67 and value[10] == 67 and value[11] == 68 and value[12] == 82
+    return value[0..1] == "II" and value[6..12] == "HEAPCCDR"
 
 
 proc testCR2(value : seq[int8]): bool = 
     ## Returns true if the image is a CR2 (Canon camera Raw 2) file.
     
     # tests: ("II" or "MM") and "CR"
-    return ((value[0] == 73 and value[1] == 73) or (value[0] == 77 and value[1] == 77)) and value[8] == 67 and value[9] == 82
+    return (value[0..1] == "II" or value[0..1] == "MM") and value[8..9] == "CR"
 
 
 proc testSVG(value : seq[int8]): bool = 
@@ -199,35 +199,35 @@ proc testSVG(value : seq[int8]): bool =
     # NOTE: this is a bad way of testing for an SVG, as it can easily fail (eg. extra whitespace before the xml definition)
     # TODO: write a better way. Might require changing from testing the first 32 bytes to testing everything, and using an
     # xml parser for ths one.
-    return value[0] == 60 and value[1] == 63 and value[2] == 120 and value[3] == 109 and value[4] == 108
+    return value[0..4] == "<?xml"
 
 
 proc testMRW(value : seq[int8]): bool = 
     ## Returns true if the image is a MRW (Minolta camera RAW) file.
     
     # tests: " MRM"
-    return value[0] == 32 and value[1] == 77 and value[2] == 82 and value[3] == 77
+    return value[0..3] == " MRM"
 
 
 proc testX3F(value : seq[int8]): bool = 
     ## Returns true if the image is a X3F (Sigma camera RAW) file.
     
     # tests: "FOVb"
-    return value[0] == 70 and value[1] == 79 and value[2] == 86 and value[3] == 98
+    return value[0..3] == "FOVb"
 
 
 proc testWEBP(value : seq[int8]): bool = 
     ## Returns true if the image is a WEBP.
     
     # tests: "RIFF" and "WEBP"
-    return value[0] == 82 and value[1] == 73 and value[2] == 70 and value[3] == 70 and value[8] == 87 and value[9] == 69 and value[10] == 66 and value[11] == 80
+    return value[0..3] == "RIFF" and value[8..11] == "WEBP"
 
 
 proc testXCF(value : seq[int8]): bool = 
     ## Returns true if the image is a XCF.
     
     # tests: "gimp xcf"
-    return value[0] == 103 and value[1] == 105 and value[2] == 109 and value[3] == 112 and value[4] == 32 and value[5] == 120 and value[6] == 99 and value[7] == 102
+    return value[0..7] == "gimp xcf"
 
 
 proc testGKSM(value : seq[int8]): bool = 
@@ -235,49 +235,49 @@ proc testGKSM(value : seq[int8]): bool =
     ##http://en.wikipedia.org/wiki/Graphical_Kernel_System
     
     # tests: "GKSM"
-    return value[0] == 71 and value[1] == 75 and value[2] == 83 and value[3] == 77
+    return value[0..3] == "GKSM"
 
 
 proc testPM(value : seq[int8]): bool = 
     ## Returns true if the image is a PM.
     
     # tests: "VIEW"
-    return value[0] == 86 and value[1] == 73 and value[2] == 69 and value[3] == 87
+    return value[0..3] == "VIEW"
 
 
 proc testFITS(value : seq[int8]): bool = 
     ## Returns true if the image is a FITS.
     
     # tests: "SIMPLE"
-    return value[0] == 83 and value[1] == 77 and value[2] == 77 and value[3] == 80 and value[4] == 76 and value[5] == 69
+    return value[0..5] == "SIMPLE"
 
 
 proc testXPM(value : seq[int8]): bool = 
     ## Returns true if the image is XPM1 or XPM3.
     
     # tests: "/* XPM */"
-    return value[0] == 47 and value[1] == 42 and value[2] == 32 and value[3] == 88 and value[4] == 80 and value[5] == 77 and value[6] == 32 and value[7] == 42 and value[8] == 47
+    return value[0..8] == "/* XPM */"
 
 
 proc testXPM2(value : seq[int8]): bool = 
     ## Returns true if the image is XPM2.
     
     # tests: "! XPM2"
-    return value[0] == 33 and value[1] == 32 and value[2] == 88 and value[3] == 80 and value[4] == 77 and value[5] == 50
+    return value[0..5] == "! XPM2"
 
 
 proc testPS(value : seq[int8]): bool = 
     ## Returns true if the image is PS.
     
     # tests: "%!"
-    return value[0] == 37 and value[1] == 33
+    return value[0..1] == "%!"
 
 
 proc testXFIG(value : seq[int8]): bool = 
     ## Returns true if the image is Xfig
     
     # tests: "#FIG"
-    return value[0] == 35 and value[1] == 70 and value[2] == 73 and value[3] == 71
+    return value[0..3] == "#FIG"
 
 
 proc testIRIS(value : seq[int8]): bool = 
