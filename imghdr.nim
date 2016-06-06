@@ -7,7 +7,7 @@
 
 ## nim-imghdr is a Nim module for determining the type of image files.
 ##
-## List of detected formats:
+## List of detectable formats:
 ##
 ## - PNG (Portable Network Graphics) format - ImageType.PNG
 ## - JPEG (Joint Photographic Experts Group) format (either JFIF or Exif) - ImageType.JPEG
@@ -71,12 +71,10 @@
 
 proc int2ascii(i : seq[int8]): string = 
     ## Converts a sequence of integers into a string containing all of the characters.
-
-    let h = high(uint8).int + 1
     
     var s : string = ""
     for j, value in i:
-        s = s & chr(value %% h)
+        s = s & (chr(int(value)))
     return s
 
 
@@ -93,7 +91,7 @@ type ImageType* {.pure.} = enum
     HDR, MP, DRW, Micrografx, PIC, VDI, ICO, JP2, Other
 
 
-proc testImage*(data : seq[int8]): ImageType {.gcsafe.}
+proc testImage*(data : seq[int8]): ImageType
 
 
 proc testPNG(value : seq[int8]): bool = 
@@ -507,7 +505,7 @@ proc testJP2(value : seq[int8]): bool =
     return value[0] == 0 and value[1] == 0 and value[2] == 0 and value[3] == 12 and value[4..5] == "jP"
 
 
-proc testImage*(file : File): ImageType {.gcsafe.} =
+proc testImage*(file : File): ImageType =
     ## Determines the format of the image file given.
     
     var data = newSeq[int8](32)
@@ -515,7 +513,7 @@ proc testImage*(file : File): ImageType {.gcsafe.} =
     return testImage(data)
 
 
-proc testImage*(filename : string): ImageType {.gcsafe.} = 
+proc testImage*(filename : string): ImageType = 
     ## Determines the format of the image with the specified filename.
     
     var file : File = open(filename)
