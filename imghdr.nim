@@ -100,7 +100,7 @@ type ImageType* {.pure.} = enum
     HDR, MP, DRW, Micrografx, PIC, VDI, ICO, JP2, YCC, FPX, DCX, ITC, NIFF, WMP, BPG, Other
 
 
-proc testImage*(data : seq[int8]): ImageType
+proc testImage*(data : seq[int8]): ImageType {.gcsafe.}
 
 
 proc testPNG(value : seq[int8]): bool = 
@@ -563,7 +563,7 @@ proc testBPG(value : seq[int8]): bool =
     return value[0..2] == "BPG" and value[3] == 251
 
 
-proc testImage*(file : File): ImageType =
+proc testImage*(file : File): ImageType {.gcsafe.} =
     ## Determines the format of the image file given.
     
     var data = newSeq[int8](32)
@@ -571,7 +571,7 @@ proc testImage*(file : File): ImageType =
     return testImage(data)
 
 
-proc testImage*(filename : string): ImageType = 
+proc testImage*(filename : string): ImageType {.gcsafe.} = 
     ## Determines the format of the image with the specified filename.
     
     var file : File = open(filename)
