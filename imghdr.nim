@@ -66,6 +66,13 @@
 ## - VDI (Ventura Publisher/GEM VDI Image Format Bitmap) format - ImageType.VDI
 ## - ICO (Windows icon) format - ImageType.ICO
 ## - JP2 (JPEG-2000) format - ImageType.JP2
+## - YCC (Kodak YCC image) format - ImageType.YCC
+## - FPX (FlashPix) format - ImageType.FPX
+## - DCX (Graphics Multipage PCX bitmap) format - ImageType.DCX
+## - ITC format - ImageType.ITC
+## - NIFF (Navy Image File Format) format - ImageType.NIFF
+## - WMP (Windows Media Photo) format - ImageType.WMP
+## - BPG format - ImageType.BPG
 ## - Unknown format - ImageType.Other
 
 
@@ -90,7 +97,7 @@ type ImageType* {.pure.} = enum
     PNG, JPEG, GIF, TIFF, RGB, PBM, PGM, PPM, BMP, XMB, CRW, CR2, SVG, MRW, X3F, WEBP, XCF,
     GKSM, PM, FITS, XPM, XPM2, PS, Xfig, IRIS, Rast, SPIFF, GEM, Amiga, TIB, JB2, CIN, PSP,
     EXR, CALS, DPX, SYM, SDR, IMG, ADEX, NITF, BigTIFF, GX2, PAT, CPT, SYW, DWG, PSD, FBM,
-    HDR, MP, DRW, Micrografx, PIC, VDI, ICO, JP2, Other
+    HDR, MP, DRW, Micrografx, PIC, VDI, ICO, JP2, YCC, FPX, DCX, ITC, NIFF, WMP, BPG, Other
 
 
 proc testImage*(data : seq[int8]): ImageType
@@ -507,6 +514,55 @@ proc testJP2(value : seq[int8]): bool =
     return value[0] == 0 and value[1] == 0 and value[2] == 0 and value[3] == 12 and value[4..5] == "jP"
 
 
+proc testYCC(value : seq[int8]): bool = 
+    ## Returns true if the image is a Kodak YCC image.
+    
+    # tests: 59 65 60 00
+    return value[0] == 59 and value[1] == 65 and value[2] == 60 and value[3] == 0
+
+
+proc testFPX(value : seq[int8]): bool = 
+    ## Returns true if the image is a FlashPix file.
+    
+    # tests: 71 B2 39 F4
+    return value[0] == 113 and value[1] == 178 and value[2] == 57 and value[3] == 244
+
+
+proc testDCX(value : seq[int8]): bool = 
+    ## Returns true if the image is a Graphics Multipage PCX bitmap file.
+    
+    # tests: B1 68 DE 3A
+    return value[0] == 177 and value[1] == 104 and value[2] == 222 and value[3] == 58
+
+
+proc testITC(value : seq[int8]): bool = 
+    ## Returns true if the image is an ITC file.
+    
+    # tests: F1 00 40 BB
+    return value[0] == 241 and value[1] == 0 and value[2] == 64 and value[3] == 187
+
+
+proc testNIFF(value : seq[int8]): bool = 
+    ## Returns true if the image is a NIFF (Navy Image File Format) file.
+    
+    # tests: "IIN1"
+    return value[0..3] == "IIN1"
+
+
+proc testWMP(value : seq[int8]): bool = 
+    ## Returns true if the image is a Windows Media Photo file.
+    
+    # tests: "II" and BC
+    return value[0..1] == "II" and value[2] == 188
+
+    
+proc testBPG(value : seq[int8]): bool = 
+    ## Returns true if the image is a BPG file.
+    
+    # tests: "BPG" and FB
+    return value[0..2] == "BPG" and value[3] == 251
+
+
 proc testImage*(file : File): ImageType =
     ## Determines the format of the image file given.
     
@@ -537,8 +593,6 @@ proc testImage*(data : seq[int8]): ImageType =
         return ImageType.CRW
     elif testCR2(data):
         return ImageType.CR2
-    elif testTIFF(data):
-        return ImageType.TIFF
     elif testRGB(data):
         return ImageType.RGB
     elif testPBM(data):
@@ -641,5 +695,21 @@ proc testImage*(data : seq[int8]): ImageType =
         return ImageType.ICO
     elif testJP2(data):
         return ImageType.JP2
+    elif testYCC(data):
+        return ImageType.YCC
+    elif testFPX(data):
+        return ImageType.FPX
+    elif testDCX(data):
+        return ImageType.DCX
+    elif testITC(data):
+        return ImageType.ITC
+    elif testNIFF(data):
+        return ImageType.NIFF
+    elif testWMP(data):
+        return ImageType.WMP
+    elif testBPG(data):
+        return ImageType.BPG
+    elif testTIFF(data):
+        return ImageType.TIFF
     else:
         return ImageType.Other

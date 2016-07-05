@@ -69,6 +69,13 @@ List of detected formats:
 * VDI (Ventura Publisher/GEM VDI Image Format Bitmap) format - `ImageType.VDI`
 * ICO (Windows icon) format - `ImageType.ICO`
 * JP2 (JPEG-2000) format - `ImageType.JP2`
+* YCC (Kodak YCC image) format - `ImageType.YCC`
+* FPX (FlashPix) format - `ImageType.FPX`
+* DCX (Graphics Multipage PCX bitmap) format - `ImageType.DCX`
+* ITC format - `ImageType.ITC`
+* NIFF (Navy Image File Format) format - `ImageType.NIFF`
+* WMP (Windows Media Photo) format - `ImageType.WMP`
+* BPG format - `ImageType.BPG`
 * Unknown format - `ImageType.Other`
 
 
