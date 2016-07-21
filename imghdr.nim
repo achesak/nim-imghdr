@@ -18,6 +18,7 @@
 ## - PBM (portable bitmap) format - ImageType.PBM
 ## - PGM (portable graymap) format - ImageType.PGM
 ## - PPM (portable pixmap) format - ImageType.PPM
+## - PAM format - ImageType.PAM
 ## - BMP (bitmap) format - ImageType.BMP
 ## - XMB (X10 or X11 bitmap) format - ImageType.XMB
 ## - Rast (Sun raster) format - ImageType.Rast
@@ -73,6 +74,7 @@
 ## - NIFF (Navy Image File Format) format - ImageType.NIFF
 ## - WMP (Windows Media Photo) format - ImageType.WMP
 ## - BPG format - ImageType.BPG
+## - FLIF format - ImageType.FLIF
 ## - Unknown format - ImageType.Other
 
 
@@ -94,10 +96,10 @@ proc `==`(i : seq[int8], s : string): bool =
 
 
 type ImageType* {.pure.} = enum
-    PNG, JPEG, GIF, TIFF, RGB, PBM, PGM, PPM, BMP, XMB, CRW, CR2, SVG, MRW, X3F, WEBP, XCF,
+    PNG, JPEG, GIF, TIFF, RGB, PBM, PGM, PPM, PAM, BMP, XMB, CRW, CR2, SVG, MRW, X3F, WEBP, XCF,
     GKSM, PM, FITS, XPM, XPM2, PS, Xfig, IRIS, Rast, SPIFF, GEM, Amiga, TIB, JB2, CIN, PSP,
     EXR, CALS, DPX, SYM, SDR, IMG, ADEX, NITF, BigTIFF, GX2, PAT, CPT, SYW, DWG, PSD, FBM,
-    HDR, MP, DRW, Micrografx, PIC, VDI, ICO, JP2, YCC, FPX, DCX, ITC, NIFF, WMP, BPG, Other
+    HDR, MP, DRW, Micrografx, PIC, VDI, ICO, JP2, YCC, FPX, DCX, ITC, NIFF, WMP, BPG, FLIF, Other
 
 
 proc testImage*(data : seq[int8]): ImageType {.gcsafe.}
@@ -164,6 +166,13 @@ proc testPPM(value : seq[int8]): bool =
     
     # tests: "P[3,6][ \t\n\r]"
     return len(value) >= 3 and value[0] == 80 and (value[1] == 51 or value[1] == 54) and (value[3] == 32 or value[3] == 9 or value[3] == 10 or value[3] == 13)
+
+
+proc testPAM(value : seq[int8]): bool = 
+    ## Returns true if the image is a PAM.
+    
+    # tests: "P7"
+    return value[0..1] == "P7"
 
 
 proc testBMP(value : seq[int8]): bool = 
@@ -563,6 +572,13 @@ proc testBPG(value : seq[int8]): bool =
     return value[0..2] == "BPG" and value[3] == 251
 
 
+proc testFLIF(value : seq[int8]): bool = 
+    ## Returns true if the image is a FLIF file.
+    
+    # tests: "FLIF"
+    return value[0..3] == "FLIF"
+
+
 proc testImage*(file : File): ImageType {.gcsafe.} =
     ## Determines the format of the image file given.
     
@@ -601,6 +617,8 @@ proc testImage*(data : seq[int8]): ImageType =
         return ImageType.PGM
     elif testPPM(data):
         return ImageType.PPM
+    elif testPAM(data):
+        return ImageType.PAM
     elif testBMP(data):
         return ImageType.BMP
     elif testXMB(data):
@@ -709,6 +727,8 @@ proc testImage*(data : seq[int8]): ImageType =
         return ImageType.WMP
     elif testBPG(data):
         return ImageType.BPG
+    elif testFLIF(data):
+        return ImageType.FLIF
     elif testTIFF(data):
         return ImageType.TIFF
     else:

@@ -21,6 +21,7 @@ List of detected formats:
 * PBM (portable bitmap) format - `ImageType.PBM`
 * PGM (portable graymap) format - `ImageType.PGM`
 * PPM (portable pixmap) format - `ImageType.PPM`
+* PAM format - `ImageType.PAM`
 * BMP (bitmap) format - `ImageType.BMP`
 * XMB (X10 or X11 bitmap) format - `ImageType.XMB`
 * Rast (Sun raster) format - `ImageType.Rast`
@@ -76,6 +77,7 @@ List of detected formats:
 * NIFF (Navy Image File Format) format - `ImageType.NIFF`
 * WMP (Windows Media Photo) format - `ImageType.WMP`
 * BPG format - `ImageType.BPG`
+* FLIF format - `ImageType.FLIF`
 * Unknown format - `ImageType.Other`
 
 
