@@ -12,7 +12,7 @@ Usage:
 
 nim-imghdr can also be used as a command line program:
 
-    imghdr \[filename1\] \[filename2\] ...
+    imghdr [filename1] [filename2] ...
 
 List of detected formats:
 
