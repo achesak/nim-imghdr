@@ -10,6 +10,10 @@ Usage:
     testImage(filename : string)
     testImage(data : seq[int8])
 
+nim-imghdr can also be used as a command line program:
+
+    imghdr \[filename1\] \[filename2\] ...
+
 List of detected formats:
 
 * PNG (Portable Network Graphics) format - `ImageType.PNG`
