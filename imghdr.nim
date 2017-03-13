@@ -75,6 +75,7 @@
 ## - WMP (Windows Media Photo) format - ImageType.WMP
 ## - BPG format - ImageType.BPG
 ## - FLIF format - ImageType.FLIF
+## - PDF (Portable Document Format) format - ImageType.PDF
 ## - Unknown format - ImageType.Other
 
 
@@ -102,7 +103,8 @@ type ImageType* {.pure.} = enum
     PNG, JPEG, GIF, TIFF, RGB, PBM, PGM, PPM, PAM, BMP, XMB, CRW, CR2, SVG, MRW, X3F, WEBP, XCF,
     GKSM, PM, FITS, XPM, XPM2, PS, Xfig, IRIS, Rast, SPIFF, GEM, Amiga, TIB, JB2, CIN, PSP,
     EXR, CALS, DPX, SYM, SDR, IMG, ADEX, NITF, BigTIFF, GX2, PAT, CPT, SYW, DWG, PSD, FBM,
-    HDR, MP, DRW, Micrografx, PIC, VDI, ICO, JP2, YCC, FPX, DCX, ITC, NIFF, WMP, BPG, FLIF, Other
+    HDR, MP, DRW, Micrografx, PIC, VDI, ICO, JP2, YCC, FPX, DCX, ITC, NIFF, WMP, BPG, FLIF, PDF,
+    Other
 
 
 proc testImage*(data : seq[int8]): ImageType {.gcsafe.}
@@ -581,6 +583,10 @@ proc testFLIF(value : seq[int8]): bool =
     # tests: "FLIF"
     return value[0..3] == "FLIF"
 
+proc testPDF(value: seq[int8]): bool =
+    ## Returns true if the image is a PDF file.
+
+    return value[0..3] == "%PDF"
 
 proc testImage*(file : File): ImageType {.gcsafe.} =
     ## Determines the format of the image file given.
@@ -734,6 +740,8 @@ proc testImage*(data : seq[int8]): ImageType =
         return ImageType.FLIF
     elif testTIFF(data):
         return ImageType.TIFF
+    elif testPDF(data):
+        return ImageType.PDF
     else:
         return ImageType.Other
 
