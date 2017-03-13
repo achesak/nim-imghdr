@@ -82,6 +82,7 @@ List of detected formats:
 * WMP (Windows Media Photo) format - `ImageType.WMP`
 * BPG format - `ImageType.BPG`
 * FLIF format - `ImageType.FLIF`
+* PDF (Portable Document Format) format - `ImageType.PDF`
 * Unknown format - `ImageType.Other`
 
 
