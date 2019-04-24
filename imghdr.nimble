@@ -1,6 +1,6 @@
 [Package]
 name = "imghdr"
-version = "1.0"
+version = "2.0"
 author = "Adam Chesak"
 description = "Library for detecting the format of an image"
 license = "MIT"
