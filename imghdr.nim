@@ -82,7 +82,7 @@
 import os
 
 
-proc int2ascii(i : seq[int8]): string = 
+proc int2ascii(i : seq[int8]): string =
     ## Converts a sequence of integers into a string containing all of the characters.
     
     let h = high(uint8).int + 1
@@ -93,7 +93,7 @@ proc int2ascii(i : seq[int8]): string =
     return s
 
 
-proc `==`(i : seq[int8], s : string): bool = 
+proc `==`(i : seq[int8], s : string): bool =
     ## Operator for comparing a seq of ints with a string.
     
     return int2ascii(i) == s
@@ -110,483 +110,349 @@ type ImageType* {.pure.} = enum
 proc testImage*(data : seq[int8]): ImageType {.gcsafe.}
 
 
-proc testPNG(value : seq[int8]): bool = 
-    ## Returns true if the image is a PNG.
-    
+proc testPNG(value : seq[int8]): ImageType =
     # tests: "\211PNG\r\n"
-    return value[1] == 80 and value[2] == 78 and value[3] == 71 and value[4] == 13 and value[5] == 10
+    return if value[1..3] == "PNG" and value[4] == 13 and value[5] == 10: PNG else: Other
 
 
-proc testJFIF(value : seq[int8]): bool = 
-    ## Returns true if the image is JPEG data in JFIF format.
-    
+proc testJFIF(value : seq[int8]): ImageType =
     # tests: "JFIF"
-    return value[6..9] == "JFIF"
+    return if value[6..9] == "JFIF": JPEG else: Other
 
 
-proc testEXIF(value : seq[int8]): bool = 
-    ## Returns true if the image is JPEG data in EXIF format.
-    
+proc testEXIF(value : seq[int8]): ImageType =
     # tests: "Exif"
-    return value[6..9] == "Exif"
+    return if value[6..9] == "Exif": JPEG else: Other
 
 
-proc testGIF(value : seq[int8]): bool = 
-    ## Returns true if the image is a GIF.
-    
+proc testGIF(value : seq[int8]): ImageType =
     # tests: "GIF87a" or "GIF89a"
-    return value[0..5] == "GIF87a" or value[0..5] == "GIF89a"
+    return if value[0..5] == "GIF87a" or value[0..5] == "GIF89a": GIF else: Other
 
 
-proc testTIFF(value : seq[int8]): bool = 
-    ## Returns true if the image is TIFF.
-    
+proc testTIFF(value : seq[int8]): ImageType =
     # tests: "MM" or "II"
-    return value[0..1] == "MM" or value[0..1] == "II"
+    return if value[0..1] == "MM" or value[0..1] == "II": TIFF else: Other
 
 
-proc testRGB(value : seq[int8]): bool = 
-    ## Returns true if the image is in the SGI format.
-    
+proc testRGB(value : seq[int8]): ImageType =
     # tests: "\001\332"
-    return value[0] == 1 and value[1] == 332
+    return if value[0] == 1 and value[1] == 332: RGB else: Other
 
 
-proc testPBM(value : seq[int8]): bool = 
-    ## Returns true if the image is a PBM.
-    
+proc testPBM(value : seq[int8]): ImageType =
     # tests: "P[1,4][ \t\n\r]"
-    return len(value) >= 3 and value[0] == 80 and (value[1] == 49 or value[1] == 52) and (value[3] == 32 or value[3] == 9 or value[3] == 10 or value[3] == 13)
+    return if len(value) >= 3 and value[0] == 80 and (value[1] == 49 or value[1] == 52) and (value[3] == 32 or value[3] == 9 or value[3] == 10 or value[3] == 13): PBM else: Other
 
 
-proc testPGM(value : seq[int8]): bool = 
-    ## Returns true if the image is a PGM.
-    
+proc testPGM(value : seq[int8]): ImageType =
     # tests: "P[2,5][ \t\n\r]"
-    return len(value) >= 3 and value[0] == 80 and (value[1] == 50 or value[1] == 53) and (value[3] == 32 or value[3] == 9 or value[3] == 10 or value[3] == 13)
+    return if len(value) >= 3 and value[0] == 80 and (value[1] == 50 or value[1] == 53) and (value[3] == 32 or value[3] == 9 or value[3] == 10 or value[3] == 13): PGM else: Other
 
 
-proc testPPM(value : seq[int8]): bool = 
-    ## Returns true if the image is a PPM.
-    
+proc testPPM(value : seq[int8]): ImageType =
     # tests: "P[3,6][ \t\n\r]"
-    return len(value) >= 3 and value[0] == 80 and (value[1] == 51 or value[1] == 54) and (value[3] == 32 or value[3] == 9 or value[3] == 10 or value[3] == 13)
+    return if len(value) >= 3 and value[0] == 80 and (value[1] == 51 or value[1] == 54) and (value[3] == 32 or value[3] == 9 or value[3] == 10 or value[3] == 13): PPM else: Other
 
 
-proc testPAM(value : seq[int8]): bool = 
-    ## Returns true if the image is a PAM.
-    
+proc testPAM(value : seq[int8]): ImageType =
     # tests: "P7"
-    return value[0..1] == "P7"
+    return if value[0..1] == "P7": PAM else: Other
 
 
-proc testBMP(value : seq[int8]): bool = 
-    ## Returns true if the image is a BMP.
-    
+proc testBMP(value : seq[int8]): ImageType =
     # tests: "BM"
-    return value[0..1] == "BM"
+    return if value[0..1] == "BM": BMP else: Other
 
 
-proc testXMB(value : seq[int8]): bool = 
-    ## Returns true if the image is a XMB.
-    
+proc testXMB(value : seq[int8]): ImageType =
     # tests: "#define "
-    return value[0..6] == "#define "
+    return if value[0..6] == "#define ": XMB else: Other
 
 
-proc testRast(value : seq[int8]): bool = 
-    ## Returns true if the image is a Sun raster file.
-    
+proc testRast(value : seq[int8]): ImageType =
     # tests: "\x59\xA6\x6A\x95"
-    return value[0] == 89 and value[1] == 166 and value[2] == 106 and value[3] == 149
+    return if value[0] == 89 and value[1] == 166 and value[2] == 106 and value[3] == 149: Rast else: Other
 
 
-proc testCRW(value : seq[int8]): bool = 
-    ## Returns true if the image is a CRW (Canon camera RAW) file.
-    
+proc testCRW(value : seq[int8]): ImageType =
     # tests: "II" and "HEAPCCDR"
-    return value[0..1] == "II" and value[6..12] == "HEAPCCDR"
+    return if value[0..1] == "II" and value[6..12] == "HEAPCCDR": CRW else: Other
 
 
-proc testCR2(value : seq[int8]): bool = 
-    ## Returns true if the image is a CR2 (Canon camera Raw 2) file.
-    
+proc testCR2(value : seq[int8]): ImageType =
     # tests: ("II" or "MM") and "CR"
-    return (value[0..1] == "II" or value[0..1] == "MM") and value[8..9] == "CR"
+    return if (value[0..1] == "II" or value[0..1] == "MM") and value[8..9] == "CR": CR2 else: Other
 
 
-proc testSVG(value : seq[int8]): bool = 
-    ## Returns true if the image is a SVG.
-    
+proc testSVG(value : seq[int8]): ImageType =
     # tests: "<?xml" 
     # NOTE: this is a bad way of testing for an SVG, as it can easily fail (eg. extra whitespace before the xml definition)
     # TODO: write a better way. Might require changing from testing the first 32 bytes to testing everything, and using an
     # xml parser for ths one.
-    return value[0..4] == "<?xml"
+    return if value[0..4] == "<?xml": SVG else: Other
 
 
-proc testMRW(value : seq[int8]): bool = 
-    ## Returns true if the image is a MRW (Minolta camera RAW) file.
-    
+proc testMRW(value : seq[int8]): ImageType =
     # tests: " MRM"
-    return value[0..3] == " MRM"
+    return if value[0..3] == " MRM": MRW else: Other
 
 
-proc testX3F(value : seq[int8]): bool = 
-    ## Returns true if the image is a X3F (Sigma camera RAW) file.
-    
+proc testX3F(value : seq[int8]): ImageType =
     # tests: "FOVb"
-    return value[0..3] == "FOVb"
+    return if value[0..3] == "FOVb": X3F else: Other
 
 
-proc testWEBP(value : seq[int8]): bool = 
-    ## Returns true if the image is a WEBP.
-    
+proc testWEBP(value : seq[int8]): ImageType =
     # tests: "RIFF" and "WEBP"
-    return value[0..3] == "RIFF" and value[8..11] == "WEBP"
+    return if value[0..3] == "RIFF" and value[8..11] == "WEBP": WEBP else: Other
 
 
-proc testXCF(value : seq[int8]): bool = 
-    ## Returns true if the image is a XCF.
-    
+proc testXCF(value : seq[int8]): ImageType =
     # tests: "gimp xcf"
-    return value[0..7] == "gimp xcf"
+    return if value[0..7] == "gimp xcf": XCF else: Other
 
 
-proc testGKSM(value : seq[int8]): bool = 
-    ## Returns true if the image is a GKSM (Graphics Kernel System) file. Yay for supporting things that are utterly out of date!
-    ##http://en.wikipedia.org/wiki/Graphical_Kernel_System
-    
+proc testGKSM(value : seq[int8]): ImageType =
     # tests: "GKSM"
-    return value[0..3] == "GKSM"
+    return if value[0..3] == "GKSM": GKSM else: Other
 
 
-proc testPM(value : seq[int8]): bool = 
-    ## Returns true if the image is a PM.
-    
+proc testPM(value : seq[int8]): ImageType =
     # tests: "VIEW"
-    return value[0..3] == "VIEW"
+    return if value[0..3] == "VIEW": PM else: Other
 
 
-proc testFITS(value : seq[int8]): bool = 
-    ## Returns true if the image is a FITS.
-    
+proc testFITS(value : seq[int8]): ImageType =
     # tests: "SIMPLE"
-    return value[0..5] == "SIMPLE"
+    return if value[0..5] == "SIMPLE": FITS else: Other
 
 
-proc testXPM(value : seq[int8]): bool = 
-    ## Returns true if the image is XPM1 or XPM3.
-    
+proc testXPM(value : seq[int8]): ImageType =
     # tests: "/* XPM */"
-    return value[0..8] == "/* XPM */"
+    return if value[0..8] == "/* XPM */": XPM else: Other
 
 
-proc testXPM2(value : seq[int8]): bool = 
-    ## Returns true if the image is XPM2.
-    
+proc testXPM2(value : seq[int8]): ImageType =
     # tests: "! XPM2"
-    return value[0..5] == "! XPM2"
+    return if value[0..5] == "! XPM2": XPM2 else: Other
 
 
-proc testPS(value : seq[int8]): bool = 
-    ## Returns true if the image is PS.
-    
+proc testPS(value : seq[int8]): ImageType =
     # tests: "%!"
-    return value[0..1] == "%!"
+    return if value[0..1] == "%!": PS else: Other
 
 
-proc testXFIG(value : seq[int8]): bool = 
-    ## Returns true if the image is Xfig
-    
+proc testXFIG(value : seq[int8]): ImageType =
     # tests: "#FIG"
-    return value[0..3] == "#FIG"
+    return if value[0..3] == "#FIG": XFIG else: Other
 
 
-proc testIRIS(value : seq[int8]): bool = 
-    ## Returns true if the image is IRIS.
-    
+proc testIRIS(value : seq[int8]): ImageType =
     # tests: 01 da
-    return value[0] == 1 and value[1] == 218
+    return if value[0] == 1 and value[1] == 218: IRIS else: Other
 
 
-proc testSPIFF(value : seq[int8]): bool =
-    ## Returns true if the image is JPEG data in SPIFF format.
-    
+proc testSPIFF(value : seq[int8]): ImageType =
     # tests: "SPIFF"
-    return value[6..10] == "SPIFF"
+    return if value[6..10] == "SPIFF": SPIFF else: Other
 
 
-proc testGEM(value : seq[int8]): bool = 
-    ## Returns true if the image is a GEM Raster file.
-    
+proc testGEM(value : seq[int8]): ImageType =
     # tests: EB 3C 90 2A
-    return value[0] == 235 and value[1] == 60 and value[2] == 144 and value[3] == 42
+    return if value[0] == 235 and value[1] == 60 and value[2] == 144 and value[3] == 42: GEM else: Other
 
 
-proc testAmiga(value : seq[int8]): bool = 
-    ## Returns true if the image is an Amiga icon file.
-    
+proc testAmiga(value : seq[int8]): ImageType =
     # tests: E3 10 00 01 00 00 00 00
-    return value[0] == 227 and value[1] == 16 and value[2] == 0 and value[3] == 1 and value[4] == 0 and value[5] == 0 and value[6] == 0 and value[7] == 0
+    return if value[0] == 227 and value[1] == 16 and value[2] == 0 and value[3] == 1 and value[4] == 0 and value[5] == 0 and value[6] == 0 and value[7] == 0: Amiga else: Other
 
 
-proc testTIB(value : seq[int8]): bool = 
-    ## Returns true if the image is an Acronis True Image file.
-    
+proc testTIB(value : seq[int8]): ImageType =
     # tests: "´nhd"
-    return value[0..3] == "´nhd"
+    return if value[0..3] == "´nhd": TIB else: Other
 
 
-proc testJB2(value : seq[int8]): bool = 
-    ## Returns true if the image is a JBOG2 image file.
-    
+proc testJB2(value : seq[int8]): ImageType =
     # tests: 97 and "JB2"
-    return value[0] == 151 and value[1..3] == "JB2"
+    return if value[0] == 151 and value[1..3] == "JB2": JB2 else: Other
 
 
-proc testCIN(value : seq[int8]): bool = 
-    ## Returns true if the image is a Kodak Cineon file.
-    
+proc testCIN(value : seq[int8]): ImageType =
     # tests: 80 2A 5F D7
-    return value[0] == 128 and value[1] == 42 and value[2] == 95 and value[3] == 215
+    return if value[0] == 128 and value[1] == 42 and value[2] == 95 and value[3] == 215: CIN else: Other
 
 
-proc testPSP(value : seq[int8]): bool = 
-    ## Returns true if the image is a Corel Paint Shop Pro image file.
-    
+proc testPSP(value : seq[int8]): ImageType =
     # tests: "BK" and 00
-    return value[1..2] == "BK" and value[3] == 0
+    return if value[1..2] == "BK" and value[3] == 0: PSP else: Other
 
 
-proc testEXR(value : seq[int8]): bool = 
-    ## Returns true if the image is an OpenEXR bitmap file.
-    
+proc testEXR(value : seq[int8]): ImageType =
     # tests: "v/1" and 01
-    return value[0..2] == "v/1" and value[2] == 1
+    return if value[0..2] == "v/1" and value[2] == 1: EXR else: Other
 
 
-proc testCALS(value : seq[int8]): bool = 
-    ## Returns true if the image is a CALS raster bitmap file.
-    
+proc testCALS(value : seq[int8]): ImageType =
     # tests: "srcdocid:"
-    return value[0..8] == "srcdocid:"
+    return if value[0..8] == "srcdocid:": CALS else: Other
 
 
-proc testDPX(value : seq[int8]): bool = 
-    ## Returns true if the image is a Society of Motion Picture and Television Engineers Digital Picture Exchange image file.
-   
+proc testDPX(value : seq[int8]): ImageType =
     # tests: "XPDS" or "SDPX"
-    return value[0..3] == "XPDS" or value[0..3] == "SDPX"
+    return if value[0..3] == "XPDS" or value[0..3] == "SDPX": DPX else: Other
 
 
-proc testSYM(value : seq[int8]): bool =
-    ## Returns true if the image is a Windows SDK graphics symbol.
-    
+proc testSYM(value : seq[int8]): ImageType =
     # tests: "Smbl"
-    return value[0..3] == "Smbl"
+    return if value[0..3] == "Smbl": SYM else: Other
 
 
-proc testSDR(value : seq[int8]): bool = 
-    ## Returns true if the image is a SmartDraw Drawing file.
-    
+proc testSDR(value : seq[int8]): ImageType =
     # tests: "SMARTDRW"
-    return value[0..7] == "SMARTDRW"
+    return if value[0..7] == "SMARTDRW": SDR else: Other
 
 
-proc testIMG(value : seq[int8]): bool = 
-    ## Returns true if the image is a Img Software Set Bitmap.
-    
+proc testIMG(value : seq[int8]): ImageType =
     # tests: "SCMI"
-    return value[0..3] == "SCMI"
+    return if value[0..3] == "SCMI": IMG else: Other
 
 
-proc testADEX(value : seq[int8]): bool = 
-    ## Returns true if the image is an ADEX Corp. ChromaGraph Graphics Card Bitmap Graphic.
-    
+proc testADEX(value : seq[int8]): ImageType =
     # tests: "PICT" and 00 08
-    return value[0..3] == "PICT" and value[4] == 0 and value[5] == 8
+    return if value[0..3] == "PICT" and value[4] == 0 and value[5] == 8: ADEX else: Other
 
 
-proc testNITF(value : seq[int8]): bool = 
-    ## Returns true if the image is a National Imagery Transmission Format.
-    
+proc testNITF(value : seq[int8]): ImageType =
     # tests: "NITF0"
-    return value[0..4] == "NITF0"
+    return if value[0..4] == "NITF0": NITF else: Other
 
 
-proc testBigTIFF(value : seq[int8]): bool = 
-    ## Returns true if the image is a BigTIFF (TIFF > 4 GB).
-    
+proc testBigTIFF(value : seq[int8]): ImageType =
     # tests: "MM" and 00 2B
-    return value[0..1] == "MM" and value[2] == 0 and value[3] == 43
+    return if value[0..1] == "MM" and value[2] == 0 and value[3] == 43: BigTIFF else: Other
 
 
-proc testGX2(value : seq[int8]): bool = 
-    ## Returns true if the image is a Show Partner graphics.
-    
+proc testGX2(value : seq[int8]): ImageType =
     # tests: "GX2"
-    return value[0..2] == "GX2"
+    return if value[0..2] == "GX2": GX2 else: Other
 
 
-proc testPAT(value : seq[int8]): bool = 
-    ## Returns true if the image is a GIMP pattern file.
-    
+proc testPAT(value : seq[int8]): ImageType =
     # tests: "GPAT"
-    return value[0..3] == "GPAT"
+    return if value[0..3] == "GPAT": PAT else: Other
 
 
-proc testCPT(value : seq[int8]): bool = 
-    ## Returns true if the image is a Corel Photopaint file.
-    
+proc testCPT(value : seq[int8]): ImageType =
     # tests: "CPTFILE" or "CPT7FILE"
-    return value[0..6] == "CPTFILE" or value[0..7] == "CPT7FILE"
+    return if value[0..6] == "CPTFILE" or value[0..7] == "CPT7FILE": CPT else: Other
 
 
-proc testSYW(value : seq[int8]): bool = 
-    ## Returns true if the image is a Harvard Graphics symbol graphic.
-    
+proc testSYW(value : seq[int8]): ImageType =
     # tests: "AMYO"
-    return value[0..3] == "AMYO"
+    return if value[0..3] == "AMYO": SYW else: Other
 
 
-proc testDWG(value : seq[int8]): bool = 
-    ## Returns true if the image is a generic AutoCAD drawing.
-    
+proc testDWG(value : seq[int8]): ImageType =
     # tests: "AC10"
-    return value[0..3] == "AC10"
+    return if value[0..3] == "AC10": DWG else: Other
 
 
-proc testPSD(value : seq[int8]): bool = 
-    ## Returns true if the image is a Photoshop image.
-    
+proc testPSD(value : seq[int8]): ImageType =
     # tests: "8BPS"
-    return value[0..3] == "8BPS"
+    return if value[0..3] == "8BPS": PSD else: Other
 
 
-proc testFBM(value : seq[int8]): bool = 
-    ## Returns true if the image is a Fuzzy bitmap file.
-    
+proc testFBM(value : seq[int8]): ImageType =
     # tests: "%bitmap"
-    return value[0..6] == "%bitmap"
+    return if value[0..6] == "%bitmap": FBM else: Other
 
 
-proc testHDR(value : seq[int8]): bool = 
-    ## Returns true if the image is a Radiance High Dynamic Range image.
-    
+proc testHDR(value : seq[int8]): ImageType =
     # tests: "#?RADIANCE"
-    return value[0..9] == "#?RADIANCE"
+    return if value[0..9] == "#?RADIANCE": HDR else: Other
 
 
-proc testMP(value : seq[int8]): bool = 
-    ## Returns true if the image is a Monochrome Picture TIFF bitmap file.
-    
+proc testMP(value : seq[int8]): ImageType =
     # tests: 0C ED
-    return value[0] == 12 and value[1] == 237
+    return if value[0] == 12 and value[1] == 237: MP else: Other
 
 
-proc testDRW(value : seq[int8]): bool = 
-    ## Returns true if the image is a generic drawing.
-    
+proc testDRW(value : seq[int8]): ImageType =
     # tests: 07
-    return value[0] == 7
+    return if value[0] == 7: DRW else: Other
 
 
-proc testMicrografx(value : seq[int8]): bool = 
-    ## Returns true if the image is a Micrografx vector graphics file.
-    
+proc testMicrografx(value : seq[int8]): ImageType =
     # tests: 01 FF 02 04 03 02
-    return value[0] == 1 and value[1] == 255 and value[2] == 2 and value[3] == 4 and value[4] == 3 and value[5] == 2
+    return if value[0] == 1 and value[1] == 255 and value[2] == 2 and value[3] == 4 and value[4] == 3 and value[5] == 2: Micrografx else: Other
 
 
-proc testPIC(value : seq[int8]): bool = 
-    ## Returns true if the image is a PIC.
-    
+proc testPIC(value : seq[int8]): ImageType =
     # tests: 01 00 00 00 01
-    return value[0] == 1 and value[1] == 0 and value[2] == 0 and value[3] == 0 and value[4] == 1
+    return if value[0] == 1 and value[1] == 0 and value[2] == 0 and value[3] == 0 and value[4] == 1: PIC else: Other
 
 
-proc testVDI(value : seq[int8]): bool = 
-    ## Returns true if the image is a Ventura Publisher/GEM VDI Image Format Bitmap file.
-    
+proc testVDI(value : seq[int8]): ImageType =
     # tests: 00 01 00 08 00 01 00 01 01
-    return value[0] == 0 and value[1] == 1 and value[2] == 0 and value[3] == 8 and value[4] == 0 and value[5] == 1 and value[6] == 0 and
-        value[7] == 1 and value[8] == 1
+    return if value[0] == 0 and value[1] == 1 and value[2] == 0 and value[3] == 8 and value[4] == 0 and value[5] == 1 and value[6] == 0 and
+        value[7] == 1 and value[8] == 1: VDI else: Other
 
 
-proc testICO(value : seq[int8]): bool = 
-    ## Returns true if the image is a Windows icon file.
-    
+proc testICO(value : seq[int8]): ImageType =
     # tests: 00 00 01 00
-    return value[0] == 0 and value[1] == 0 and value[2] == 1 and value[3] == 0
+    return if value[0] == 0 and value[1] == 0 and value[2] == 1 and value[3] == 0: ICO else: Other
 
 
-proc testJP2(value : seq[int8]): bool = 
-    ## Returns true if the image is a JPEG-2000.
-    
+proc testJP2(value : seq[int8]): ImageType =
     # tests: 00 00 00 0C and "jP"
-    return value[0] == 0 and value[1] == 0 and value[2] == 0 and value[3] == 12 and value[4..5] == "jP"
+    return if value[0] == 0 and value[1] == 0 and value[2] == 0 and value[3] == 12 and value[4..5] == "jP": JP2 else: Other
 
 
-proc testYCC(value : seq[int8]): bool = 
-    ## Returns true if the image is a Kodak YCC image.
-    
+proc testYCC(value : seq[int8]): ImageType =
     # tests: 59 65 60 00
-    return value[0] == 59 and value[1] == 65 and value[2] == 60 and value[3] == 0
+    return if value[0] == 59 and value[1] == 65 and value[2] == 60 and value[3] == 0: YCC else: Other
 
 
-proc testFPX(value : seq[int8]): bool = 
-    ## Returns true if the image is a FlashPix file.
-    
+proc testFPX(value : seq[int8]): ImageType =
     # tests: 71 B2 39 F4
-    return value[0] == 113 and value[1] == 178 and value[2] == 57 and value[3] == 244
+    return if value[0] == 113 and value[1] == 178 and value[2] == 57 and value[3] == 244: FPX else: Other
 
 
-proc testDCX(value : seq[int8]): bool = 
-    ## Returns true if the image is a Graphics Multipage PCX bitmap file.
-    
+proc testDCX(value : seq[int8]): ImageType =
     # tests: B1 68 DE 3A
-    return value[0] == 177 and value[1] == 104 and value[2] == 222 and value[3] == 58
+    return if value[0] == 177 and value[1] == 104 and value[2] == 222 and value[3] == 58: DCX else: Other
 
 
-proc testITC(value : seq[int8]): bool = 
-    ## Returns true if the image is an ITC file.
-    
+proc testITC(value : seq[int8]): ImageType =
     # tests: F1 00 40 BB
-    return value[0] == 241 and value[1] == 0 and value[2] == 64 and value[3] == 187
+    return if value[0] == 241 and value[1] == 0 and value[2] == 64 and value[3] == 187: ITC else: Other
 
 
-proc testNIFF(value : seq[int8]): bool = 
-    ## Returns true if the image is a NIFF (Navy Image File Format) file.
-    
+proc testNIFF(value : seq[int8]): ImageType =
     # tests: "IIN1"
-    return value[0..3] == "IIN1"
+    return if value[0..3] == "IIN1": NIFF else: Other
 
 
-proc testWMP(value : seq[int8]): bool = 
-    ## Returns true if the image is a Windows Media Photo file.
-    
+proc testWMP(value : seq[int8]): ImageType =
     # tests: "II" and BC
-    return value[0..1] == "II" and value[2] == 188
+    return if value[0..1] == "II" and value[2] == 188: WMP else: Other
 
     
-proc testBPG(value : seq[int8]): bool = 
-    ## Returns true if the image is a BPG file.
-    
+proc testBPG(value : seq[int8]): ImageType =
     # tests: "BPG" and FB
-    return value[0..2] == "BPG" and value[3] == 251
+    return if value[0..2] == "BPG" and value[3] == 251: BPG else: Other
 
 
-proc testFLIF(value : seq[int8]): bool = 
-    ## Returns true if the image is a FLIF file.
-    
+proc testFLIF(value : seq[int8]): ImageType =
     # tests: "FLIF"
-    return value[0..3] == "FLIF"
+    return if value[0..3] == "FLIF": FLIF else: Other
 
-proc testPDF(value: seq[int8]): bool =
-    ## Returns true if the image is a PDF file.
 
-    return value[0..3] == "%PDF"
+proc testPDF(value: seq[int8]): ImageType =
+    # tests: "%PDF"
+    return if value[0..3] == "%PDF": PDF else: Other
+
 
 proc testImage*(file : File): ImageType {.gcsafe.} =
     ## Determines the format of the image file given.
@@ -596,7 +462,7 @@ proc testImage*(file : File): ImageType {.gcsafe.} =
     return testImage(data)
 
 
-proc testImage*(filename : string): ImageType {.gcsafe.} = 
+proc testImage*(filename : string): ImageType {.gcsafe.} =
     ## Determines the format of the image with the specified filename.
     
     var file : File = open(filename)
@@ -605,151 +471,30 @@ proc testImage*(filename : string): ImageType {.gcsafe.} =
     return format
 
 
-proc testImage*(data : seq[int8]): ImageType = 
+proc testImage*(data : seq[int8]): ImageType =
     ## Determines the format of the image from the bytes given.
     
-    if testPNG(data):
-        return ImageType.PNG
-    elif testJFIF(data) or testEXIF(data):
-        return ImageType.JPEG
-    elif testGIF(data):
-        return ImageType.GIF
-    elif testCRW(data):
-        return ImageType.CRW
-    elif testCR2(data):
-        return ImageType.CR2
-    elif testRGB(data):
-        return ImageType.RGB
-    elif testPBM(data):
-        return ImageType.PBM
-    elif testPGM(data):
-        return ImageType.PGM
-    elif testPPM(data):
-        return ImageType.PPM
-    elif testPAM(data):
-        return ImageType.PAM
-    elif testBMP(data):
-        return ImageType.BMP
-    elif testXMB(data):
-        return ImageType.XMB
-    elif testRast(data):
-        return ImageType.Rast
-    elif testSVG(data):
-        return ImageType.SVG
-    elif testMRW(data):
-        return ImageType.MRW
-    elif testX3F(data):
-        return ImageType.X3F
-    elif testWEBP(data):
-        return ImageType.WEBP
-    elif testXCF(data):
-        return ImageType.XCF
-    elif testGKSM(data):
-        return ImageType.GKSM
-    elif testPM(data):
-        return ImageType.PM
-    elif testFITS(data):
-        return ImageType.FITS
-    elif testXPM(data):
-        return ImageType.XPM
-    elif testXPM2(data):
-        return ImageType.XPM2
-    elif testPS(data):
-        return ImageType.PS
-    elif testXFIG(data):
-        return ImageType.Xfig
-    elif testIRIS(data):
-        return ImageType.IRIS
-    elif testSPIFF(data):
-        return ImageType.SPIFF
-    elif testGEM(data):
-        return ImageType.GEM
-    elif testAmiga(data):
-        return ImageType.Amiga
-    elif testTIB(data):
-        return ImageType.TIB
-    elif testJB2(data):
-        return ImageType.JB2
-    elif testCIN(data):
-        return ImageType.CIN
-    elif testPSP(data):
-        return ImageType.PSP
-    elif testEXR(data):
-        return ImageType.EXR
-    elif testCALS(data):
-        return ImageType.CALS
-    elif testDPX(data):
-        return ImageType.DPX
-    elif testSYM(data):
-        return ImageType.SYM
-    elif testSDR(data):
-        return ImageType.SDR
-    elif testIMG(data):
-        return ImageType.IMG
-    elif testADEX(data):
-        return ImageType.ADEX
-    elif testNITF(data):
-        return ImageType.NITF
-    elif testBigTIFF(data):
-        return ImageType.BigTIFF
-    elif testGX2(data):
-        return ImageType.GX2
-    elif testPAT(data):
-        return ImageType.PAT
-    elif testCPT(data):
-        return ImageType.CPT
-    elif testSYW(data):
-        return ImageType.SYW
-    elif testDWG(data):
-        return ImageType.DWG
-    elif testPSD(data):
-        return ImageType.PSD
-    elif testFBM(data):
-        return ImageType.FBM
-    elif testHDR(data):
-        return ImageType.HDR
-    elif testMP(data):
-        return ImageType.MP
-    elif testDRW(data):
-        return ImageType.DRW
-    elif testMicrografx(data):
-        return ImageType.Micrografx
-    elif testPIC(data):
-        return ImageType.PIC
-    elif testVDI(data):
-        return ImageType.VDI
-    elif testICO(data):
-        return ImageType.ICO
-    elif testJP2(data):
-        return ImageType.JP2
-    elif testYCC(data):
-        return ImageType.YCC
-    elif testFPX(data):
-        return ImageType.FPX
-    elif testDCX(data):
-        return ImageType.DCX
-    elif testITC(data):
-        return ImageType.ITC
-    elif testNIFF(data):
-        return ImageType.NIFF
-    elif testWMP(data):
-        return ImageType.WMP
-    elif testBPG(data):
-        return ImageType.BPG
-    elif testFLIF(data):
-        return ImageType.FLIF
-    elif testTIFF(data):
-        return ImageType.TIFF
-    elif testPDF(data):
-        return ImageType.PDF
-    else:
-        return ImageType.Other
+    let testers = @[testPNG, testJFIF, testEXIF, testGIF, testTIFF, testRGB, testPBM,
+        testPGM, testPPM, testPAM, testBMP, testXMB, testRast, testCRW, testCR2,
+        testSVG, testMRW, testX3F, testWEBP, testXCF, testGKSM, testPM, testFITS,
+        testXPM, testXPM2, testPS, testXFIG, testIRIS, testSPIFF, testGEM, testAmiga,
+        testTIB, testJB2, testCIN, testPSP, testEXR, testCALS, testDPX, testSYM,
+        testSDR, testIMG, testADEX, testNITF, testBigTIFF, testGX2, testPAT, testCPT,
+        testSYW, testDWG, testPSD, testFBM, testHDR, testMP, testDRW, testMicrografx,
+        testPIC, testVDI, testICO, testJP2, testYCC, testFPX, testDCX, testITC,
+        testNIFF, testWMP, testBPG, testFLIF, testPDF
+    ]
+    
+    for tester in testers:
+        if tester(data) != Other:
+            return tester(data)
+    return Other
 
 
 # When run as it's own program, determine the type of the provided image file:
 when isMainModule:
     
-    if paramCount() < 2:
+    if paramCount() < 1:
         echo("Invalid number of parameters. Usage:\nimghdr [filename1] [filename2] ...")
     
     for i in 1..paramCount():
